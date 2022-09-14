@@ -2,6 +2,8 @@
 	--main-color:#002A54;
 	--main-dark:#176ba4;
   --main-hover:#EC1616;
+  --main-border:#FF6A00;
+  --main-border-hover:#e35300;
 
   --header-back:#F5F5F5;
   
@@ -26,6 +28,62 @@ a{
 p{
     text-align: justify;
 }
+header{
+
+}
+
+/*Header*/
+.topBanner{
+
+}
+.topBanner img{
+    width:100%;
+}
+.headerTop{
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+.searchHeader{
+    display: flex;
+}
+.searchHolder{
+    display: flex;
+    border: 2px solid var(--main-border);
+    border-radius: 20px 0 0 20px;
+    padding: 5px 20px;
+}
+.searchHolder input{
+    font-size: 14px;
+    padding: 5px 0px;
+    border:none;
+    width:300px;
+    outline: 0;
+}
+.searchButton{
+    background-color: var(--main-border);
+    border-radius: 0 20px 20px 0;
+    padding: 5px 40px;
+    color:#fff;
+    display: grid;
+    align-items: center;
+    cursor: pointer;
+}
+.searchButton:hover{
+    background-color: var(--main-border-hover);
+}
+.clientField{
+    display: flex;
+}
+.clientHeader{
+    display: flex;
+}
+
+
+.menuBar{
+
+}
+
 
 
 
