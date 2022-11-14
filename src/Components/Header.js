@@ -18,18 +18,33 @@ function Header(){
                 </div>
                 <div className="clientField">
                     <div className="loginHeader">
-                        Login
+                        Sign in<br/>
+                        Join for free
                     </div>
                     <div className="clientHeader">
                         <div className="clientPart">
+                            <i className="fa messageHeader"></i><br/>
                             Messages
                         </div>
                         <div className="clientPart">
+                            <i className="fa orderHeader"></i><br/>
                             Orders
                         </div>
                         <div className="clientPart">
+                            <i className="fa cartHeader"></i><br/>
                             Cart
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div className="seprate"></div>
+            <div className="menuBar">
+                <div className="catMenu">
+                    Categories
+                </div>
+                <div className="simpleMenu">
+                    <div className="menuItem">
+
                     </div>
                 </div>
             </div>

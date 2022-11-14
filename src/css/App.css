@@ -17,6 +17,7 @@ html{
 body{
     margin: 0;
     font-family: iran;
+    color: #333;
 }
 input , button{
     font-family: iran; 
@@ -74,15 +75,67 @@ header{
 }
 .clientField{
     display: flex;
+    font-size: 14px;
+    width: 30%;
+    align-items: baseline;
+    justify-content: center;
 }
 .clientHeader{
     display: flex;
 }
+.loginHeader{
+    position: relative;
+    width: 140px;
+    cursor: pointer;
+    justify-content: center;
+}
+.loginHeader:hover{
+    color:var(--main-color)
+}
+.loginHeader::before{
+    content: "\f2c0";
+    font-family: "FontAwesome";
+    font-size: 33px;
+    float: left;
+    width: 35px;
 
+}
+.clientPart{
+    text-align: center;
+    margin: auto 3%;
+    min-width: 60px;
+}
+.messageHeader::before{
+    font-size: 23px;
+    content: "\f27b";
+}
+.orderHeader::before{
+    font-size: 23px;
+    content: "\f0ca";
+}
+.cartHeader::before{
+    font-size: 23px;
+    content: "\f290";
+}
 
+.seprate{
+    background: #E6E7EB;
+    height: 1px;
+    width: 100%;
+}
 .menuBar{
 
 }
+.catMenu{
+
+}
+.catMenu::before{
+    content: "\f03a";
+}
+.catMenu::after{
+    content: "\f107";
+}
+
 
 
 

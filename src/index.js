@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
-import './css/App.css'
+import './css/App.css';import './css/font-awesome.css';
 import Home from './Pages/Home';
 import Layout from './Components/Layout';
 
