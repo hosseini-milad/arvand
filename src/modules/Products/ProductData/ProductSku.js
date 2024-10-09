@@ -1,6 +1,5 @@
 import StyleSelect from "../../../components/Button/AutoComplete"
 import StyleInput from "../../../components/Button/Input"
-import { parseDesc } from "../../../env"
 import tabletrans from "../../../translate/tables"
 
 function ProductSKU(props){
@@ -9,11 +8,6 @@ function ProductSKU(props){
     const brand=content&&content.brandList
     const category = content&&content.categoryList
     const filterList = content&&content.filterList
-    const autoFetch=(e)=>{
-      var result = parseDesc(def.description)
-      console.log(result)
-      props.setFilters(result)
-    }
     return(
         <div className="pd-row">
           <div className="row-title">
@@ -35,8 +29,6 @@ function ProductSKU(props){
                     ...prevState,
                     sku:e
                   }))}/>
-                  <div className="edit-btn autoFilter" onClick={autoFetch}>
-                      Auto Filter</div>
                 {/*<StyleInput title={tabletrans.quantity[props.lang]} direction={props.direction}
                  class={"formInput"} defaultValue={content?content.quantity:''} 
                  action={(e)=>props.setProductChange(prevState => ({
@@ -57,16 +49,25 @@ function ProductSKU(props){
                     ...prevState,
                     catId:e?e.catCode:''
                   }))}/>
-                {filterList&&filterList.map((filter,i)=>(
-                  <StyleSelect title={filter.title} direction={"rtl"}
-                  class={"formInput halfWidth"} key={i}
-                  defaultValue={(def&&def.filters)?def.filters[filter.enTitle]:''} 
-                  options={filter?filter.optionsP:[]} label="title"
-                  action={(e)=>props.setFilters(data=>({
-                    ...data,
-                    [filter.enTitle]:e})
-                  )}/>
-                ))}
+                  <table>
+                    <tbody>
+                      <tr>
+                        <th>ردیف</th>
+                        <th width="100px">{filterList&&filterList[0].title}</th>
+                        <th>کد محصول</th>
+                        <th>تصویر</th>
+                      </tr>
+                      {filterList&&filterList&&filterList[0].optionsP.map((option,i)=>(
+                        <tr key={i}>
+                          <td>{i+1}</td>
+                          <td>{option}</td>
+                          <td><input /></td>
+                          <td><input /></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                
               </div>
               {/*<div className="gender-wrapper">
                 <h5>Gender</h5>
