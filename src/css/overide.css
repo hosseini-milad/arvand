@@ -1,0 +1,61 @@
+.inRow{
+  display: flex;
+}
+.category-tabs div a i {
+  display: block;
+  font-size: 40px;
+  color: #9d9d9d;
+  background: #f9f9f9;
+  padding: 20px 0 10px;
+  border-radius: 100px 100px 0 0;
+  text-align: center;
+  width: 150px;
+  margin: auto;
+}
+.nav-link{
+  text-align: center;
+  overflow-x: hidden;
+  white-space: nowrap;
+  max-width: 170px;
+  text-overflow: ellipsis;
+}
+.category-tabs div .nav-tabs .nav-link.active {
+  border: none;
+  border-bottom: 5px solid #e61d26;
+  background: #f2f2f2;
+}
+.category-tabs div .nav-tabs .nav-link.active i{
+  background: transparent;
+}
+.rowHolder{
+  display: flex;
+  gap:10px;
+  padding: 50px 0;
+  justify-content: space-around;
+}
+.col6{
+  width: 45%;
+}
+.mySwipper img{
+  border-radius: 10px;
+}
+
+.hm-sec-2 [class^="col-"] .ftr-tradeshows-col ul li h4{
+  color: #5d6177;
+  font-size: 14px;
+  margin-bottom: 3px;
+  font-weight: 600;
+}
+.blogHolder{
+  display: flex;
+  gap:10px;
+}
+.blogImageHolder{
+  width: 80px;
+}
+.blogImageHolder img{
+  object-fit: contain;
+}
+.blogTextHolder{
+
+}
