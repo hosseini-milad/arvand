@@ -3,14 +3,10 @@ function DashboardHeader(){
         <div className="col-xs-12">
             <div className="top-bar">
                 <div className="col-sm-6 package-image">
-                <ul className="text-left">
-                    <ol className="breadcrumb">
-                    <li className="active">Dashboard</li>
-                    </ol>
-                </ul>
+                <h3>داشبورد</h3>
                 </div>
                 <div className="col-sm-6">
-                <ul className="top_right list-inline pull-right" id="authbar">
+                <ul className="top_right list-inline pull-left" id="authbar">
                     <div className="sidebar_toggle_btn">
                     <li>
                         <a href="javascript:;" onclick="toggleNav()">

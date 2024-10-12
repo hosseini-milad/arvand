@@ -2,6 +2,7 @@ import DashboardHeader from "../modules/Dashboard/DashboardHeader"
 import DashboardSideBar from "../modules/Dashboard/DashboardSideBar"
 
 import '../css/dashboard.css';
+import DashboardHolder from "../modules/Dashboard/DashboardHolder";
 
 function Dashboard(){
     return(
@@ -10,6 +11,7 @@ function Dashboard(){
                 <div className="site-wrapper site-wrapper2 active" id="target">
                     <DashboardHeader />
                     <DashboardSideBar />
+                    <DashboardHolder />
                 </div>
             </div>
         </section>

@@ -384,6 +384,8 @@ small {
 }
 .list-inline {
   padding-left:0;
+  display: flex;
+  gap:10px;
   list-style:none
 }
 .list-inline-item {
