@@ -5,14 +5,14 @@ function Category(props){
   //window.scrollTo(0, 270);},[pageNumber,filters,perPage,refreshTable])
    return(
     <section className="category-tabs">
-  <div className="container">
-    <div className="row">
-      <div className="col-md-12">
-        <h2>
-          <span>مشاهده <b>دسته بندی ها</b>
-          </span>
-        </h2>
-        <br/>
+    <div className="container">
+      <div className="row">
+        <div className="col-md-12">
+          <h2>
+            <span>مشاهده <b>دسته بندی ها</b>
+            </span>
+          </h2>
+          <br/>
         
         <div className="nav nav-tabs owl-carousel-tabs owl-carousel owl-theme categoryTabsNav d-nne owl-loaded owl-drag">
           <div className="owl-stage-outer">

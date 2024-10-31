@@ -4,7 +4,7 @@ const Header = (props)=>{
       <header className="py-md-4 py-2">
         <div className="container">
           <div className="row">
-            <div className="col-md-3 col-xl-3 d-flex justify-content-center justify-content-md-start mb-md-0 mb-2">
+            <div className="col-md-3 col-xl-3 d-flex justify-content-center justify-content-md-start mb-md-0 mb-2 hideMobile">
               <a href="/" title="eWorldTrade">
                 <img src="https://esimg.eworldtrade.com/2K19/images/logohighres.svg" width="255" height="44" className="logo mt-0" alt="eWorldTrade"/>
               </a>
@@ -665,7 +665,7 @@ const Header = (props)=>{
                 </form>
               </div>
             </div>
-            <div className="col-md-4 col-xl-3 d-flex justify-content-center justify-content-md-end mt-md-0 mt-2 header-list">
+            <div className="col-md-4 col-xl-3 d-flex justify-content-center justify-content-md-end mt-md-0 mt-2 header-list hideMobile">
               <ul>
                 <li>
                   <i className="fas fa-user-circle"></i>

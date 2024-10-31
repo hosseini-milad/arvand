@@ -630,7 +630,7 @@ function Slider(props){
               </li>
             </ul>
           </div>
-          <div className="header-banner d-md-block d-none col-lg-6 col-md-8 pl-0 pr-0 position-relative" data-test-currentdate="18-09-2024">
+          <div className="header-banner d-md-block col-lg-6 col-md-8 pl-0 pr-0 position-relative" data-test-currentdate="18-09-2024">
             <div className="owl-carousel owl-theme owl-drag owl-loaded" id="bannerCarousel2">
             <Swiper className='slider'
               spaceBetween={50}
@@ -696,64 +696,6 @@ function Slider(props){
               </div>
             </form>
           </section>
-          <div className="header-banner d-md-none d-block col-lg-6 col-md-8 pl-0 pr-0 position-relative" data-test-currentdate="18-09-2024">
-            <div className="owl-carousel owl-theme owl-drag owl-loaded" id="bannerCarousel">
-              <div className="owl-stage-outer">
-                <div className="owl-stage" style={{transform: "translate3d(0px, 0px, 0px)", transition: "all"}}>
-                  <div className="owl-item">
-                    <div className="item" >
-                      <a href="javascript:;">
-                        <img alt="Slider Banner" src="https://esimg.eworldtrade.com/2K19/images/banner/webp/ewt-1911981.jpeg" loading="lazy" width="569" height="424" className="img-fluid w-100"/>
-                      </a>
-                    </div>
-                  </div>
-                  <div className="owl-item">
-                    <div className="item" >
-                      <a href="javascript:;">
-                        <img alt="Slider Banner" src="https://esimg.eworldtrade.com/2K19/images/banner/webp/ewt-1974738.jpeg" loading="lazy" width="569" height="424" className="img-fluid w-100"/>
-                      </a>
-                    </div>
-                  </div>
-                  <div className="owl-item">
-                    <div className="item" >
-                      <a href="javascript:;">
-                        <img alt="Slider Banner" src="https://esimg.eworldtrade.com/2K19/images/banner/webp/ewt-1975296-2.jpeg" loading="lazy" width="569" height="424" className="img-fluid w-100"/>
-                      </a>
-                    </div>
-                  </div>
-                  <div className="owl-item">
-                    <div className="item">
-                      <a href="javascript:registerPopup(&quot;Connecting customers to your business&quot;)">
-                        <img src="https://esimg.eworldtrade.com/2K19/images/banner/banner3.jpg" loading="lazy" alt="Slider Banner" width="569" height="424" className="img-fluid w-100"/>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="owl-nav disabled">
-                <button type="button" role="presentation" className="owl-prev">
-                  <span aria-label="Previous">‹</span>
-                </button>
-                <button type="button" role="presentation" className="owl-next">
-                  <span aria-label="Next">›</span>
-                </button>
-              </div>
-              <div className="owl-dots">
-                <div className="owl-dot">
-                  <button aria-label="01"></button>
-                </div>
-                <div className="owl-dot">
-                  <button aria-label="02"></button>
-                </div>
-                <div className="owl-dot">
-                  <button aria-label="03"></button>
-                </div>
-                <div className="owl-dot active">
-                  <button aria-label="15"></button>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
     )

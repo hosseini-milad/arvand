@@ -5,8 +5,8 @@ const Footer = (props)=>{
       <footer>
         <div class="container">
           <div class="row">
-            <div class="col-xl-2 col-lg-3 col-md-4 mt-3">
-              <span>About Us</span>
+            <div class="col-xl-3 col-lg-3 col-md-4 mt-3">
+              <span>درباره ما</span><hr/>
               <ul>
                 <li>
                   <a href="https://www.eworldtrade.com/about-us/" title="About eWorldTrade">About eWorldTrade</a>
@@ -25,45 +25,8 @@ const Footer = (props)=>{
                 </li>
               </ul>
             </div>
-            <div class="col-xl-2 col-lg-3 col-md-4 mt-sm-3">
-              <span>Trade Services</span>
-              <ul>
-                <li>
-                  <a href="https://www.eworldtrade.com/become-a-partner/" title="Become a Partner">Become a Partner</a>
-                </li>
-                <li>
-                  <a href="https://www.eworldtrade.com/events/" title="Global Trade Shows">Global Trade Shows</a>
-                </li>
-                <li>
-                  <a href="https://www.eworldtrade.com/news/" title="News &amp; Stories">News &amp; Stories</a>
-                </li>
-                <li>
-                  <a href="https://www.eworldtrade.com/hts/" title="News &amp; Stories">HTS Codes</a>
-                </li>
-              </ul>
-            </div>
-            <div class="col-xl-2 col-lg-3 col-md-4 mt-sm-3">
-              <span>Value Services</span>
-              <ul>
-                <li>
-                  <a href="https://www.eworldtrade.com/video-testimonials/" title="Video Testimonial">Video Testimonial</a>
-                </li>
-                <li>
-                  <a href="https://www.eworldtrade.com/about-us/#trustedReview" title="Success Stories">Success Stories</a>
-                </li>
-                <li>
-                  <a href="https://www.eworldtrade.com/seat-sourcing/" title="Seat Sourcing">Seat Sourcing</a>
-                </li>
-                <li>
-                  <a href="https://www.eworldtrade.com/special-recommendations/" title="Special Recommendations">Special Recommendations</a>
-                </li>
-                <li>
-                  <a href="https://www.eworldtrade.com/best-selling-products/" title="Best Selling Products">Best Selling Products</a>
-                </li>
-              </ul>
-            </div>
-            <div class="col-xl-2 col-lg-3 col-md-4 mt-sm-3">
-              <span>Privacy Policy</span>
+            <div class="col-xl-3 col-lg-3 col-md-4 mt-sm-3">
+              <span>قوانین و مقررات</span><hr/>
               <ul>
                 <li>
                   <a href="https://www.eworldtrade.com/privacy-policy/" title="Privacy Policy">Privacy Policy</a>
@@ -82,8 +45,8 @@ const Footer = (props)=>{
                 </li>
               </ul>
             </div>
-            <div class="col-xl-2 col-lg-3 col-md-4 2 mt-sm-3">
-              <span>Contact Us</span>
+            <div class="col-xl-3 col-lg-3 col-md-4 2 mt-sm-3">
+              <span>تماس با ما</span><hr/>
               <ul>
                 <li>
                   <a href="https://www.eworldtrade.com/post-requirements/" title="Post your Requirements">Post your Requirement</a>
@@ -99,8 +62,7 @@ const Footer = (props)=>{
                 </li>
               </ul>
             </div>
-            <div class="col-xl-2 col-lg-3 col-md-4 mt-sm-3">
-              <span>We Accept</span>
+            <div class="col-xl-3 col-lg-3 col-md-4 mt-sm-3">
               <ul class="li-none">
                 <li class="pl-0">
                   <a href="https://my.escrow.com/partner.asp?pid=581405" title="Escrow">
@@ -127,7 +89,7 @@ const Footer = (props)=>{
             <div class="bottom-footer pt-3 pb-3 mt-3 col-12">
               <div class="row">
                 <div class="col-lg-3">
-                  <a href="https://www.eworldtrade.com/" title="eWorldTrade">
+                  <a href="/" title="eWorldTrade">
                     <img src="https://esimg.eworldtrade.com/2K19/images/logofullwhite.svg" loading="lazy" width="255" height="45" class="logo-footer mt-lg-0 mt-3" alt="eWorldTrade"/>
                   </a>
                 </div>
@@ -147,12 +109,7 @@ const Footer = (props)=>{
                   <ul class="list-inline social-icon text-lg-right text-center mt-3">
                     <li class="list-inline-item">
                       <a href="https://www.facebook.com/eworldtrade" aria-label="Eworldtrade - Facebook" target="_blank" rel="nofollow">
-                        <i class="fab fa-facebook-f"></i>
-                      </a>
-                    </li>
-                    <li class="list-inline-item">
-                      <a href="https://www.twitter.com/eWorld_trade" aria-label="Eworldtrade - Twitter" target="_blank" rel="nofollow">
-                        <i class="fab fa-twitter"></i>
+                        <i class="fab fa-facebook"></i>
                       </a>
                     </li>
                     <li class="list-inline-item">
@@ -162,7 +119,7 @@ const Footer = (props)=>{
                     </li>
                     <li class="list-inline-item">
                       <a href="https://www.linkedin.com/company/eworldtrade/" aria-label="Eworldtrade - Linkedin" target="_blank" rel="nofollow">
-                        <i class="fab fa-linkedin-in"></i>
+                        <i class="fab fa-linkedin"></i>
                       </a>
                     </li>
                     <li class="list-inline-item">
