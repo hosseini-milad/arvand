@@ -162,11 +162,12 @@ router.post('/fetch-product',jsonParser,async (req,res)=>{
             res.json({filter:{}})
             return
         } 
-        const productData = await ProductSchema.findOne({_id: ObjectID(productId)})
+        const productData = await ProductSchema.findOne({_id: ObjectID(productId)}).lean()
         if(!productData){
             res.json({filter:{}})
             return
         }
+        
         const brandList = await BrandSchema.find({})
         const categoryList = await category.find({})
         const brandData = productData.brandId?
@@ -175,7 +176,12 @@ router.post('/fetch-product',jsonParser,async (req,res)=>{
             categoryList.find(item=>item.catCode==productData.catId):''
         const filterList = catData?
             await Filters.find({"category._id":catData._id.toString()}):''
-       
+        var subItem=[]
+        var options = filterList&&filterList[0]&&filterList[0].optionsP
+        for(var i=0;i<options.length;i++){
+            subItem.push({filter:options[i],value:i,
+                sku:calcSKU(catData,brandData,productData.sku,i)})
+        }
         res.json({filter:productData,brandList:brandList,categoryList:categoryList,
         brandData:brandData,catData:catData,filterList:filterList})
     }
