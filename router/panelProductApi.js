@@ -31,6 +31,7 @@ const users = require('../models/auth/users');
 const products = require('../models/product/products');
 const UpdateMarket = require('../middleware/UpdateMarket');
 const crmlist = require('../models/crm/crmlist');
+const calcSKU = require('../middleware/calcSKU');
 
 router.post('/fetch-service',jsonParser,async (req,res)=>{
     var serviceId = req.body.serviceId?req.body.serviceId:''
