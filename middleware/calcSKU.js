@@ -1,10 +1,10 @@
 const calcSKU=(cat,brand,sku,filter)=>{
-    var sku = '';
+    var result = '';
     try{
         var catId = cat&&cat.catCode
         var brandId = brand&&brand.brandCode
-        sku = catId + brandId + sku + filter
-        return(sku)
+        result = catId + brandId + sku + filter
+        return(result)
     }
     catch(error){
         return(error)
