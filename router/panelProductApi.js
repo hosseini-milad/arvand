@@ -182,6 +182,7 @@ router.post('/fetch-product',jsonParser,async (req,res)=>{
             subItem.push({filter:options[i],value:i,
                 sku:calcSKU(catData,brandData,productData.sku,i)})
         }
+        productData.subItem = subItem
         res.json({filter:productData,brandList:brandList,categoryList:categoryList,
         brandData:brandData,catData:catData,filterList:filterList})
     }
