@@ -32,6 +32,7 @@ const products = require('../models/product/products');
 const UpdateMarket = require('../middleware/UpdateMarket');
 const crmlist = require('../models/crm/crmlist');
 const calcSKU = require('../middleware/calcSKU');
+const FilterOptions = require('../models/product/FilterOptions');
 
 router.post('/fetch-service',jsonParser,async (req,res)=>{
     var serviceId = req.body.serviceId?req.body.serviceId:''
@@ -167,7 +168,7 @@ router.post('/fetch-product',jsonParser,async (req,res)=>{
         if(!productData){
             res.json({filter:{}})
             return
-        }
+        } 
         
         const brandList = await BrandSchema.find({})
         const categoryList = await category.find({})
@@ -175,13 +176,15 @@ router.post('/fetch-product',jsonParser,async (req,res)=>{
             brandList.find(item=>item.brandCode==productData.brandId):''
         const catData = productData.catId?
             categoryList.find(item=>item.catCode==productData.catId):''
+        
         const filterList = catData?
-            await Filters.find({"category._id":catData._id.toString()}):''
+            await Filters.findOne({"category":catData._id.toString()}):''
+        
         var subItem=[]
-        var options = filterList&&filterList[0]&&filterList[0].optionsP
-        for(var i=0;i<options.length;i++){
-            subItem.push({filter:options[i],value:i,
-                sku:calcSKU(catData,brandData,productData.sku,i)})
+        var options = filterList&&await FilterOptions.find({filterId:filterList.enTitle}).lean()
+        for(var i=0;i<(options&&options.length);i++){
+            subItem.push({...options[i],value:i,
+                sku:calcSKU(catData,brandData,productData.sku,options[i].optionCode)})
         }
         productData.subItem = subItem
         res.json({filter:productData,brandList:brandList,categoryList:categoryList,
@@ -287,6 +290,8 @@ router.post('/editProduct',jsonParser,async(req,res)=>{
             imageUrl:  req.body.imageUrl,
             thumbUrl:  req.body.thumbUrl
         }
+        
+        ///var partialSku = 
         var productResult = ''
         if(productId) productResult=await ProductSchema.updateOne({_id:productId},
             {$set:data})
@@ -359,7 +364,7 @@ async function resizeImage(imageData,outUrl){
         width: 150,
         height: 150
     });
- 
+
     fs.writeFileSync("."+outUrl, image);
 }
 
@@ -458,7 +463,7 @@ router.post('/fetch-category',jsonParser,async (req,res)=>{
             res.json({filter:{}})
             return
         }
-        const catData = await category.findOne({_id: ObjectID(catId)})
+        const catData = await category.findOne({catCode: catId})
         const catList = await category.find()
        res.json({filter:catData,options:catList})
     }
@@ -534,6 +539,8 @@ router.post('/fetch-filter',jsonParser,async (req,res)=>{
         }
         const categoryData = await category.find()
         const filterData = await Filters.findOne({_id: ObjectID(filterId)})
+        const categoryInfo = await category.findOne({_id:ObjectID(filterData.category)})
+        filterData.category = categoryInfo&&categoryInfo.title
        res.json({filter:filterData,category:categoryData})
     }
     catch(error){
@@ -790,6 +797,82 @@ router.post('/report-total',jsonParser,auth,async(req,res)=>{
         res.json({data:sortList,marketList:managerList,
             errorPrice:errorPrice,userList,brandList,
             totalCount,totalPrice,marketData,brandData})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+router.post('/add-option',jsonParser,async(req,res)=>{
+    const data = req.body
+    if(!data){
+        res.status(400).json({error:"no data"})
+        return
+    }
+    if(!data.title||!data.filter||!data.code){
+        res.status(400).json({error:"اطلاعات کامل نیست"})
+        return
+    }
+    try{ 
+        var options = await FilterOptions.create(
+            {filterId:  data.filter,
+                optionTitle:data.title,
+                optionCode:data.code,
+                sort:0})
+        const optionList = await FilterOptions.find({filterId:data.filter})
+        res.json({data:optionList})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+router.post('/list-option',jsonParser,async(req,res)=>{
+    const filterId = req.body.filterId
+    if(!filterId){
+        res.status(400).json({error:"کد فیلتر وارد نشده است"})
+        return
+    }
+    try{ 
+        const optionList = await FilterOptions.find({filterId:filterId})
+        res.json({data:optionList})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+router.post('/remove-option',jsonParser,async(req,res)=>{
+    const optionId = req.body.optionId
+    const filterId = req.body.filterId
+    if(!optionId||!filterId){
+        res.status(400).json({error:"کد آپشن وارد نشده است"})
+        return
+    }
+    try{ 
+        await FilterOptions.deleteOne({_id:ObjectID(optionId)})
+        const optionList = await FilterOptions.find({filterId:filterId})
+        res.json({data:optionList})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+router.post('/add-filter',jsonParser,async(req,res)=>{
+    const data = req.body
+    if(!data){
+        res.status(400).json({error:"no data"})
+        return
+    }
+    if(!data.title||!data.filter||!data.code){
+        res.status(400).json({error:"اطلاعات کامل نیست"})
+        return
+    }
+    try{ 
+        var filterData = await FilterOptions.create(
+            {   title:  data.title,
+                enTitle:data.enTitle,
+                category:data.category,
+                sort:0})
+        
+        res.json({data:filterData})
     }
     catch(error){
         res.status(500).json({message: error.message})

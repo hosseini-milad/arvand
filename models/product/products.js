@@ -4,7 +4,8 @@ var Schema = mongoose.Schema;
 
 const ProductSchema = new Schema({
     title:  { type: String},
-    sku: { type: String , unique: true},
+    sku: { type: String},
+    partialSku: { type: String , unique: true},
     enTitle:String,
     description:String,
     brandId:String,
@@ -17,5 +18,6 @@ const ProductSchema = new Schema({
     imgGallery:String,
     imgGalleryUrl:{type:String},
     categories:{ type:String},
+    subItem:{ type:Array},
 })
 module.exports = mongoose.model('product',ProductSchema);
