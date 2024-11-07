@@ -1,12 +1,10 @@
 
 const env={
-    siteApi:'http://localhost:6690/api',
-    //siteApi:'https://testadmin.sharifoilco.com/api',
-    // siteApi:'https://shopadmin.sharifoilco.com/api',
+    //siteApi:'http://localhost:6690/api',
+    siteApi:'https://admin.deepware.ir/api',
     
-    siteApiUrl:'http://localhost:6690',
-    //siteApiUrl:'https://testadmin.sharifoilco.com',
-    // siteApiUrl:'https://shopadmin.sharifoilco.com',
+    //siteApiUrl:'http://localhost:6690',
+    siteApiUrl:'https://admin.deepware.ir',
     cookieName:'arvand-login',
     //cookieName:'panel-login',
     //cookieName:'mehr-login',

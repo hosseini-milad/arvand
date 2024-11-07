@@ -3,9 +3,7 @@ import tabletrans from "../../../translate/tables"
 
 function ProductPrice(props){
     const content = props.content
-    console.log(content)
     const filterList = content.filterList
-    console.log(content)
     return(
         <div className="pd-row">
           <div className="row-title">

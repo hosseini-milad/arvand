@@ -7,67 +7,86 @@ import formtrans from "../../translate/forms"
 import env from "../../env"
 
 function FilterPart(props){
-    const [listCategory,setListCategory]=useState()
-    const [optionSelect,setOptionSelect] = useState()
-    const [optionShow,setOptionShow] = useState(1)
+  const data = props.data
     
-    const updateOptions=(key)=>{
-      if(key!=='Enter') return
-      const index = props.options&&props.options.length
-      props.setOptions(existingItems => {
-        return [
-          ...existingItems.slice(0, index),
-          optionSelect,
-          ...existingItems.slice(index + 1),
-        ]
-      })
-      setOptionSelect('')
-      setOptionShow(0)
-      setTimeout(()=>setOptionShow(1),100)
+    const [optionSelect,setOptionSelect] = useState()
+    const [optionShow,setOptionShow] = useState()
+    const [codeSelect,setCodeSelect] = useState()
+    
+    const addOptions=()=>{
+      const body={
+        code:codeSelect,
+        title:optionSelect,
+        filter:data&&data.enTitle
     }
-    const data = props.data
-    const removeItem=(index)=>{
-      var tempArray = props.options
-      tempArray.splice(index, 1);
-      props.setOptions(tempArray)
-      setOptionShow(0)
-      setTimeout(()=>setOptionShow(1),100)
-    }
-    useEffect(()=>{
-      var postOptions={
+    const postOptions={
         method:'post',
         headers: {'Content-Type': 'application/json'},
-        body:JSON.stringify({})
+        body:JSON.stringify(body)
       }
-     
-  fetch(env.siteApi + "/panel/product/list-category",postOptions)
+      console.log(postOptions)
+  fetch(env.siteApi + "/panel/product/add-option",postOptions)
   .then(res => res.json())
   .then(
     (result) => {
-      if(result.error){
-      }
-        else{
-            setListCategory(result.filter)
-        }
-        
+      setOptionShow()
+      setTimeout(()=>setOptionShow(result.data),100)
+      setOptionSelect()
+      setCodeSelect()
     },
     (error) => {
       console.log(error);
+    })
+  }
+    
+    const removeItem=(optionId)=>{
+      const body={
+        optionId:optionId,
+        filterId:data&&data.enTitle
     }
-  )
-    },[])
+    const postOptions={
+        method:'post',
+        headers: {'Content-Type': 'application/json'},
+        body:JSON.stringify(body)
+      }
+      console.log(postOptions)
+  fetch(env.siteApi + "/panel/product/remove-option",postOptions)
+  .then(res => res.json())
+  .then(
+    (result) => {
+      setOptionShow()
+      setTimeout(()=>setOptionShow(result.data),100)
+      setOptionSelect()
+      setCodeSelect()
+    },
+    (error) => {
+      console.log(error);
+    })
+    }
+    useEffect(()=>{
+      const body={
+        filterId:data&&data.enTitle
+    }
+    const postOptions={
+        method:'post',
+        headers: {'Content-Type': 'application/json'},
+        body:JSON.stringify(body)
+      }
+  fetch(env.siteApi + "/panel/product/list-option",postOptions)
+  .then(res => res.json())
+  .then(
+    (result) => {
+      setOptionShow(result.data)
+    },
+    (error) => {
+      console.log(error);
+    })
+    },[data])
+    
     return(
         <div className="ps-section">
           <div className="info-box">
             <div className="info-wrapper">
-              <StyleSelect title={formtrans.category[props.lang]} direction={props.direction} 
-                options={listCategory||[]}
-                label={"title"||null}
-                defaultValue={data?data.category:''} class={"formInput"}
-                action={(e)=>props.setFilterChange(prevState => ({
-                  ...prevState,
-                  category:e
-                }))}/>
 
               {/*<StyleSelect title={formtrans.type[props.lang]} direction={props.direction} 
                 options={["Input","Select"]}
@@ -77,24 +96,24 @@ function FilterPart(props){
                   type:e
                 }))}/>*/}
               <div className="optionsSelect">
-                {optionShow?<StyleInput title={formtrans.options[props.lang]} direction={props.direction} 
+                {optionShow?<><StyleInput title={formtrans.options[props.lang]} direction={props.direction} 
                   value={optionSelect} class={"formInput"}
-                  action={(e)=>setOptionSelect(e)}
-                  doAction={(e)=>updateOptions(e.key)}/>:<></>}
+                  action={(e)=>setOptionSelect(e)}/>
+                  <StyleInput title={"code"} direction={props.direction} 
+                  value={codeSelect} class={"formInput"}
+                  action={(e)=>setCodeSelect(e)}/></>:<></>}
+                  <input type="button" value="+" 
+                  onClick={addOptions}/>
                   <ul> 
-                    {props.options&&props.options.map((option,i)=>(
-                      <li key={i} className="optionItem"><span>{option}</span>
-                        <i className="fa fa-remove" onClick={()=>removeItem(i)}></i>
+                    {optionShow&&optionShow.map((option,i)=>(
+                      <li key={i} className="optionItem">
+                        <span>{option.optionTitle}</span>
+                        <small>{option.optionCode}</small>
+                        <i className="fa fa-remove" onClick={()=>removeItem(option._id)}></i>
                       </li>
                     ))}
                   </ul>
               </div>
-              <StyleInput title={formtrans.optionsN[props.lang]} direction={props.direction} 
-                defaultValue={data?data.optionsN:''} class={"formInput"}
-                action={(e)=>props.setFilterChange(prevState => ({
-                  ...prevState,
-                  optionsN:e
-                }))}/>
               
           </div>
         </div>

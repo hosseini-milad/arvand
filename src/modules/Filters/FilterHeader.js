@@ -1,16 +1,39 @@
+import { useEffect, useState } from "react"
 import StyleInput from "../../components/Button/Input"
+import env from "../../env"
 import errortrans from "../../translate/error"
+import StyleSelect from "../../components/Button/AutoComplete"
+import formtrans from "../../translate/forms"
 
 function FilterHeader(props){
   const content=props.content
+  const [listCategory,setListCategory]=useState()
+  useEffect(()=>{
+    var postOptions={
+      method:'post',
+      headers: {'Content-Type': 'application/json'},
+      body:JSON.stringify({})
+    }
+   
+fetch(env.siteApi + "/panel/product/list-category",postOptions)
+.then(res => res.json())
+.then(
+  (result) => {
+    if(result.error){
+    }
+      else{
+          setListCategory(result.filter)
+      }
+      
+  },
+  (error) => {
+    console.log(error);
+  }
+)
+  },[])
     return(
       <div className="access-header">
-        <a className="ps-back-btn" href="/filter">
-          <i className="fa-solid fa-rotate-left" style={{color: "#c0c0c0"}}></i>
-          <p>{errortrans.back[props.lang]}</p>
-        </a>
         <div className="ps-title">
-          <i className="fa-solid fa-certificate fa-sm" style={{color: "#00c6c6"}}></i>
           <div className="p-wrapper">
             <StyleInput title={errortrans.filterName[props.lang]} direction={props.direction} 
               defaultValue={content.title||''} class={"formInput"}
@@ -27,12 +50,17 @@ function FilterHeader(props){
                 ...prevState,
                 enTitle:e
               }))}/>
+              
+              <StyleSelect title={formtrans.category[props.lang]} direction={props.direction} 
+                options={listCategory||[]}
+                label={"title"||null}
+                defaultValue={content?content.category:''} class={"formInput"}
+                action={(e)=>props.setFilterChange(prevState => ({
+                  ...prevState,
+                  category:e
+              }))}/>
         </div>
-        <div className={props.direction==="ltr"?"asso-btn":"asso-btn asso-btnRTL"}>
-          <p>لیست کاربران</p>
-        </div>
-        <div className="help-btn">
-          <i className="fa-regular fa-question" style={{color: "#c0c0c0"}}></i></div>
+        
       </div>
     )
 }

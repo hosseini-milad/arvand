@@ -53,15 +53,15 @@ function ProductSKU(props){
                     <tbody>
                       <tr>
                         <th>ردیف</th>
-                        <th width="100px">{filterList&&filterList[0].title}</th>
+                        <th width="100px">{filterList&&filterList.title}</th>
                         <th>کد محصول</th>
                         <th>تصویر</th>
                       </tr>
-                      {filterList&&filterList&&filterList[0].optionsP.map((option,i)=>(
+                      {def&&def.subItem.map((option,i)=>(
                         <tr key={i}>
                           <td>{i+1}</td>
-                          <td>{option}</td>
-                          <td><input /></td>
+                          <td>{option.optionTitle}</td>
+                          <td><input value={option.sku} /></td>
                           <td><input /></td>
                         </tr>
                       ))}
