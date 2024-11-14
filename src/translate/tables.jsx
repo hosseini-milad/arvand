@@ -19,6 +19,14 @@ const tabletrans ={
         english: "Discounts",
         persian: "تخفیفات"
     },
+    tags:{
+        english: "Tags",
+        persian: "تگ ها"
+    },
+    newTag:{
+        english: "New Tag",
+        persian: "تگ جدید"
+    },
     credit:{
         english: "Credit",
         persian: "اعتبار"

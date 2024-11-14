@@ -1,14 +1,16 @@
 import React, { useRef, useEffect, useState } from "react";
 import env from "../../../env";
-import Status from "../../Components/Status";
 import errortrans from "../../../translate/error";
 import tabletrans from "../../../translate/tables";
 import formtrans from "../../../translate/forms";
 import ProductName from "./ProductName";
 import ProductSKU from "./ProductSku";
-import ProductPrice from "./ProductPrice";
+import ProductTags from "./ProductTags";
+import Cookies from "universal-cookie";
+const cookies = new Cookies();
 
 function ProductDetailHolder(props) {
+  const token = cookies.get(env.cookieName);
   const url = window.location.pathname.split("/")[3];
   const direction = props.lang ? props.lang.dir : errortrans.defaultDir;
   const lang = props.lang ? props.lang.lang : errortrans.defaultLang;
@@ -16,12 +18,13 @@ function ProductDetailHolder(props) {
 
   const [content, setContent] = useState("");
   const [filters, setFilters] = useState({});
-  const [purchase, setPurchase] = useState("");
+  const [loader, setLoader] = useState(1);
   const [updateContent, setUpdateContent] = useState(0);
   const [productChange, setProductChange] = useState("");
 
   useEffect(() => {
     if (url === "new") {setUpdateContent(1);return;}
+    if(!loader) return
     var postOptions = {
       method: "post",
       headers: { "Content-Type": "application/json" },
@@ -47,13 +50,14 @@ function ProductDetailHolder(props) {
               () => setError({ errorText: "", errorColor: "brown" }),
               2000
             );
+            setLoader(0)
           }
         },
         (error) => {
           console.log(error);
         }
       );
-  }, []);
+  }, [loader]);
   const saveProducts = (navigateBack) => {
     //if(newCustomer) {
     var postOptions = {
@@ -120,8 +124,9 @@ function ProductDetailHolder(props) {
               ) : (
                 <></>
               )}
-              <ProductPrice direction={direction} lang={lang} content={content} 
-          productChange={productChange} setProductChange={setProductChange}/>
+              {loader?<></>:<ProductTags direction={direction} lang={lang} content={content} 
+                productChange={productChange} setProductChange={setProductChange}
+                token={token} setLoader={setLoader}/>}
               <div className="create-btn-wrapper">
                 <div className="dense-btn">
                   <input

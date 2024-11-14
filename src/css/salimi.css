@@ -4166,6 +4166,7 @@ dialog {
 .sale-price,
 .tax-active-wrapper {
   width: 100%;
+  display: flex;
 }
 .regular-price i,
 .sale-price i,

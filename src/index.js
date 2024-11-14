@@ -56,6 +56,7 @@ import Printofficial from "./modules/Print/Printofficial";
 import Discount from "./pages/Discount";
 import OffCustomer from "./pages/Offcustomer";
 import PrintStore from "./modules/Crm/PrintStore";
+import Tags from "./pages/Tags";
 const cookies = new Cookies();
 const style = document.getElementById("style-direction");
 var lang = JSON.parse(localStorage.getItem(env.cookieLang));
@@ -269,6 +270,14 @@ root.render(
           }
         />
 
+        <Route
+          path="/tags"
+          element={
+            <Layout>
+              <Tags lang={lang} />
+            </Layout>
+          }
+        />
         <Route
           path="/brands"
           element={

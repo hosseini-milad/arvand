@@ -30,6 +30,7 @@ function StyleSelect(props){
             //className={stylisRTLPlugin}
             defaultValue={props.defaultValue?props.defaultValue:''}
             options={testOptions||[]}
+            multiple={props.multiple}
             style={{minWidth:"176px"}}
             onChange={(e,value)=>props.action(value)}
             renderInput={(params) => (

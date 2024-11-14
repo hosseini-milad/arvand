@@ -130,6 +130,14 @@ const menutrans ={
                     href:"/category",
                     url:"category"
                 },
+                {
+                    english: "Tags",
+                    persian: "تگها",
+                    index:1,
+                    icon:"fa-bar-chart",
+                    href:"/tags",
+                    url:"tags"
+                },
                 ]
         },
         {
