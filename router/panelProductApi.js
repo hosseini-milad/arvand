@@ -25,6 +25,7 @@ const openOrders = require('../models/orders/openOrders');
 const Filters = require('../models/product/Filters');
 const factory = require('../models/product/factory');
 const orders = require('../models/orders/orders');
+const Tags = require("../models/product/tag")
 const faktor = require('../models/product/faktor');
 const cart = require('../models/product/cart');
 const users = require('../models/auth/users');
@@ -33,6 +34,8 @@ const UpdateMarket = require('../middleware/UpdateMarket');
 const crmlist = require('../models/crm/crmlist');
 const calcSKU = require('../middleware/calcSKU');
 const FilterOptions = require('../models/product/FilterOptions');
+const tagproduct = require('../models/product/tagproduct');
+const ListTags = require('../middleware/ListTags');
 
 router.post('/fetch-service',jsonParser,async (req,res)=>{
     var serviceId = req.body.serviceId?req.body.serviceId:''
@@ -169,7 +172,7 @@ router.post('/fetch-product',jsonParser,async (req,res)=>{
             res.json({filter:{}})
             return
         } 
-        
+        const ListTagData = await ListTags(productData.sku)
         const brandList = await BrandSchema.find({})
         const categoryList = await category.find({})
         const brandData = productData.brandId?
@@ -188,6 +191,7 @@ router.post('/fetch-product',jsonParser,async (req,res)=>{
         }
         productData.subItem = subItem
         res.json({filter:productData,brandList:brandList,categoryList:categoryList,
+            ListTagData,
         brandData:brandData,catData:catData,filterList:filterList})
     }
     catch(error){
@@ -290,7 +294,6 @@ router.post('/editProduct',jsonParser,async(req,res)=>{
             imageUrl:  req.body.imageUrl,
             thumbUrl:  req.body.thumbUrl
         }
-        
         ///var partialSku = 
         var productResult = ''
         if(productId) productResult=await ProductSchema.updateOne({_id:productId},
@@ -368,7 +371,7 @@ async function resizeImage(imageData,outUrl){
     fs.writeFileSync("."+outUrl, image);
 }
 
-/*Product*/
+/*Brands*/
 router.post('/fetch-brand',jsonParser,async (req,res)=>{
     var brandId = req.body.brandId?req.body.brandId:''
     try{
@@ -529,6 +532,90 @@ router.post('/editCats',jsonParser,async(req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
+
+
+/*Tags*/
+router.post('/list-tags',jsonParser,async (req,res)=>{
+    var pageSize = req.body.pageSize?req.body.pageSize:"10";
+    var offset = req.body.offset?(parseInt(req.body.offset)):0;
+    try{const data={
+        category:req.body.category,
+        search:req.body.search,
+        sku:req.body.sku,
+        offset:req.body.offset,
+        pageSize:pageSize
+    }
+        const tagData = await ListTags('',data.search)
+            
+           res.json({data:tagData})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    } 
+})
+router.post('/update-tag',jsonParser,auth,async(req,res)=>{
+    var tagId= req.body.tagId?req.body.tagId:''
+    if(tagId === "new")tagId=''
+    try{ 
+        const data = {
+            title:  req.body.title,
+            enTitle: req.body.enTitle,
+            sku: req.body.sku
+        }
+        var tagResult = ''
+        //const brandDetail = await BrandSchema.updateOne({_id:ObjectID(brandId)})
+        if(tagId) tagResult=await Tags.updateOne({_id:ObjectID(tagId)},
+            {$set:data})
+        else{
+
+            tagResult= await Tags.create(data)
+            await tagproduct.create(data)
+        }
+        
+        res.json({result:tagResult,success:tagId?"Updated":"Created"})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+router.post('/update-product-tag',jsonParser,auth,async(req,res)=>{
+    try{ 
+        const data = {
+            title:  req.body.title,
+            sku: req.body.sku
+        }
+        
+        var tagResult = await tagproduct.deleteMany({sku:data.sku})
+        if(!data.title){
+            res.json({message:"انجام شد"})
+            return
+        } 
+        //const brandDetail = await BrandSchema.updateOne({_id:ObjectID(brandId)})
+        for(var i=0;i<data.title.length;i++){
+            var tag = data.title[i]
+            await tagproduct.create({sku:data.sku,title:tag.title})
+        }
+         
+        const ListTagData = await ListTags(data.sku)
+        res.json({result:ListTagData})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+router.post('/delete-tag',jsonParser,auth,async(req,res)=>{
+    var tagId= req.body.tagId?req.body.tagId:''
+    try{
+        var tagResult = ''
+        if(tagId) tagResult=await Tags.deleteOne({_id:ObjectID(brandId)})
+        
+        res.json({result:tagResult,success:tagId?"deleted":""})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+
 /*Filters*/
 router.post('/fetch-filter',jsonParser,async (req,res)=>{
     var filterId = req.body.filterId?req.body.filterId:''
