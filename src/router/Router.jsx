@@ -6,6 +6,9 @@ import Products from "../pages/Products/Products";
 import ProductLists from "../pages/ProductLists/ProductLists";
 import PanelLayout from "../layouts/Panel/PanelLayout";
 import PanelProfile from "../pages/PanelProfile/PanelProfile";
+import PanelNewProduct from "../pages/PanelNewProduct/PanelNewProduct";
+import PanelProductList from "../pages/PanelProductList/PanelProductList";
+import AboutUs from "../pages/AboutUs/AboutUs";
 const Router = createBrowserRouter([
   {
     path: "/",
@@ -14,6 +17,10 @@ const Router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+      },
+      {
+        path: "about-us",
+        element: <AboutUs />,
       },
       {
         path: "products",
@@ -39,11 +46,11 @@ const Router = createBrowserRouter([
       },
       {
         path: "NewProduct",
-        element: <PanelProfile />,
+        element: <PanelNewProduct />,
       },
       {
         path: "ProductLists",
-        element: <PanelProfile />,
+        element: <PanelProductList />,
       },
     ],
   },

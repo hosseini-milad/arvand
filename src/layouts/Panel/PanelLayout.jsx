@@ -5,7 +5,7 @@ export default function PanelLayout() {
   return (
     <>
       <SideBar />
-      <main className="main">
+      <main className="panel">
         <Outlet />
       </main>
     </>

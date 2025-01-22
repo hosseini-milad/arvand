@@ -1,5 +1,4 @@
 export { default as CatCol } from "./CatColum/CatCol";
-
 export { default as EducationColum } from "./EducationColum/EducationColum";
 export { default as Features } from "./Features/Features";
 export { default as Navbar } from "./Navbar/Navbar";
@@ -15,4 +14,17 @@ export { default as CategoryTabs } from "./CategoryTabs/CategoryTabs";
 export { default as Banner } from "./Banner/Banner";
 export { default as CatCard } from "./CatCard/CatCard";
 export { default as NavList } from "./NavList/NavList";
+export { default as AboutUsPar } from "./AboutUsPar/AboutUsPar";
 export { default as PanelHeader } from "./PanelHeader/PanelHeader";
+export { default as ProfileTableMaker } from "./ProfileTableMaker/ProfileTableMaker";
+export { default as PNPTrade } from "./PanelNewProduct/Trade/PNPTrade";
+export { default as PNPBasic } from "./PanelNewProduct/Basic/PNPBasic";
+export { default as PNPCategory } from "./PanelNewProduct/Category/PNPCategory";
+export { default as PNPDetails } from "./PanelNewProduct/Details/PNPDetails";
+export { default as PNPLogistic } from "./PanelNewProduct/Logistic/PNPLogistic";
+export { default as PNPProductDetail } from "./PanelNewProduct/ProductDetail/PNPProductDetail";
+export { default as NewProductBtns } from "./PanelNewProduct/NewProductBtns/NewProductBtns";
+export { default as PPLFilters } from "./PanelProductList/PPLFilters/PPLFilters";
+export { default as PPLTableBody } from "./PanelProductList/PPLTableComponents/PPLTableBody";
+export { default as PPLTableHead } from "./PanelProductList/PPLTableComponents/PPLTableHead";
+export { default as PPLTableActions } from "./PanelProductList/PPLTableComponents/PPLTableActions";

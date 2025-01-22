@@ -75,7 +75,7 @@ export default function SideBar() {
           {MenuList.map((item, i) => (
             <li key={i}>
               <a
-                href={item.href}
+                href={item.children ? "#" : "/Dashboard/" + item.href}
                 onClick={() => handleMenuClick(i)}
                 className={isActive(item.url) ? "a-active" : ""}
               >
@@ -83,7 +83,7 @@ export default function SideBar() {
                 {item.title}
                 {item.children && (
                   <i
-                    class={`arrow-icon fa-solid fa-${
+                    className={`arrow-icon fa-solid fa-${
                       openIndex === i ? "chevron-down" : "chevron-left"
                     } `}
                   ></i>
@@ -101,7 +101,7 @@ export default function SideBar() {
                   {item.children.map((child, j) => (
                     <li key={j}>
                       <a
-                        href={child.href}
+                        href={"/Dashboard/" + child.href}
                         className={isActive(child.url) ? "a-active" : ""}
                       >
                         {child.title}

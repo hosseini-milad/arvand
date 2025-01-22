@@ -110,3 +110,10 @@ body {
 .main {
   background-color: white;
 }
+.panel {
+  width: calc(100%-250px);
+  min-height: 100vh;
+  margin-right: 250px;
+  padding: 1.5rem;
+  background-color: #f7f7f7;
+}

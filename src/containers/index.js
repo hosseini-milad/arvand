@@ -8,5 +8,7 @@ export { default as AllCategory } from "./AllCategory/AllCategory";
 export { default as ProductListCard } from "./ProductListCard/ProductListCard";
 export { default as ProductList } from "./ProductList/ProductList";
 export { default as ProductFilters } from "./ProductFilters/ProductFilters";
-
+export { default as ProfileTables } from "./ProfileTables/ProfileTables";
 export { default as SideBar } from "./SideBar/SideBar";
+export { default as PNPLists } from "./PNPLists/PNPLists";
+export { default as PPLTable } from "./PPLTable/PPLTable";
