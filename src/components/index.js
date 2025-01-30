@@ -1,3 +1,4 @@
+export { default as LoginForm } from "./LoginForm/LoginForm";
 export { default as CatCol } from "./CatColum/CatCol";
 export { default as EducationColum } from "./EducationColum/EducationColum";
 export { default as Features } from "./Features/Features";
@@ -28,3 +29,6 @@ export { default as PPLFilters } from "./PanelProductList/PPLFilters/PPLFilters"
 export { default as PPLTableBody } from "./PanelProductList/PPLTableComponents/PPLTableBody";
 export { default as PPLTableHead } from "./PanelProductList/PPLTableComponents/PPLTableHead";
 export { default as PPLTableActions } from "./PanelProductList/PPLTableComponents/PPLTableActions";
+export { default as ProductBasic } from "./ProductInfoComponents/ProductBasic/ProductBasic";
+export { default as ProductDetails } from "./ProductInfoComponents/ProductDetails/ProductDetails";
+export { default as ProductSupplier } from "./ProductInfoComponents/ProductSupplier/ProductSupplier";

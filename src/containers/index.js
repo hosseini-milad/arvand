@@ -12,3 +12,5 @@ export { default as ProfileTables } from "./ProfileTables/ProfileTables";
 export { default as SideBar } from "./SideBar/SideBar";
 export { default as PNPLists } from "./PNPLists/PNPLists";
 export { default as PPLTable } from "./PPLTable/PPLTable";
+export { default as ProductInfo } from "./ProductInfo/ProductInfo";
+export { default as Login } from "./Login/Login";

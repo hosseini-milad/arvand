@@ -2,7 +2,7 @@ import React from "react";
 import { AllCategory } from "../../containers";
 import { NavList, Banner } from "../../components";
 import BgBanner from "../../assets/Banners/products-banner.jpg";
-export default function Products() {
+export default function Category() {
   const BannerInfo = {
     Image: BgBanner,
     title: "Manufacturers & Suppliers Directory",

@@ -9,7 +9,12 @@ export default function ProductListCard(props) {
           <img src={data.img} alt={data.img} />
         </div>
         <div className="col col-desc">
-          <p className="title">{data.title}</p>
+          <a
+            className="title"
+            href={`${window.location.href}/${data.title}`}
+          >
+            {data.title}
+          </a>
           <p className="desc">{data.description}</p>
           <a href="#">Show More...</a>
           <ul>
@@ -36,7 +41,7 @@ export default function ProductListCard(props) {
             </li>
             <li>
               <label>Key Products:</label>
-              <span>{data.key.substring(0, 20)+"..."}</span>
+              <span>{data.key.substring(0, 20) + "..."}</span>
             </li>
           </ul>
           <div className="btn-wrapper">

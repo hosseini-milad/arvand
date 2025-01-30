@@ -1,10 +1,10 @@
-import React from 'react'
-import "./SetOrderCol.css"
+import React from "react";
+import "./SetOrderCol.css";
 export default function SetOrderCol() {
   return (
-    <div className='SetOrderCol'>
+    <div className="SetOrderCol">
       <div className="container">
-        <p className="title">سفارش زمانبندی</p>
+        <p className="title">ثبت درخواست</p>
         <div className="input-container">
           <div className="input-wrapper">
             <label htmlFor="category">نیازمندی</label>
@@ -20,7 +20,7 @@ export default function SetOrderCol() {
           </div>
           <div className="input-wrapper">
             <label htmlFor="phone">شماره تماس</label>
-            <input type="text" id="phone" style={{textAlign:"left"}}/>
+            <input type="text" id="phone" style={{ textAlign: "left" }} />
           </div>
           <div className="input-wrapper W50">
             <label htmlFor="company">شرکت</label>
@@ -30,10 +30,14 @@ export default function SetOrderCol() {
             <label htmlFor="metod">طریقه خرید</label>
             <select id="metod"></select>
           </div>
+          <div className="input-wrapper">
+            <label htmlFor="image">آپلود عکس</label>
+            <input type="file" id="image" />
+          </div>
         </div>
         <button className="submit-btn">جزئیات سفارش</button>
         <span>بعد از تایید مدیریت سفارش شما پردازش خواهد شد.</span>
       </div>
     </div>
-  )
+  );
 }
