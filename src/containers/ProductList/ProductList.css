@@ -24,7 +24,7 @@
     justify-content: space-between;
     border-bottom: #d4d4d4 1px solid;
     position: relative;
-    margin-bottom: 2rem;
+    margin-bottom: 0.5rem;
     padding-bottom: 0.5rem;
 
     .text {
@@ -79,7 +79,25 @@
 .ProductList .product-filter-wrapper {
   width: 25%;
 }
+.ProductList .tags-lists {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding-block: 1rem;
 
+  p {
+    padding: 0.2rem 1.5rem;
+    background-color: white;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  .activeTag{
+    background-color: grey;
+    color: white;
+  }
+}
 @media (max-width: 1000px) {
   .ProductList .ProductList-container {
     max-width: 100%;

@@ -222,3 +222,18 @@
     }
   }
 }
+@media (max-width: 800px) {
+  .Login .banner {
+    display: none;
+  }
+  .Login .LoginForm {
+    width: 100%;
+  }
+  .Login .connect-btn-wrapper{
+    flex-direction: column;
+    gap: 0.5rem !important;
+  }
+  .Login .btn-wrapper{
+    flex-wrap: wrap;
+  }
+}

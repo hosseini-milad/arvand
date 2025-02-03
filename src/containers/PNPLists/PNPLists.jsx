@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   PNPTrade,
   PNPBasic,
@@ -10,28 +10,35 @@ import {
 } from "../../components";
 import "./PNPLists.css";
 export default function PNPLists() {
+  const [NewProduct, setNewProduct] = useState();
   return (
     <div className="PNPLists">
       <div className="PNPLists-container">
         <div className="search-wrapper">
-          <p className="title">Search Category</p>
+          <p className="title">Search Product</p>
           <div className="wrapper">
             <input
               type="text"
               placeholder="Enter industry Keywords:e.g. laptop"
             />
-            <button>Search</button>
+            <button onClick={() => setNewProduct(false)}>Search</button>
+            <button onClick={() => setNewProduct(true)}>Add New Product</button>
           </div>
         </div>
-        <PNPCategory />
-        <div className="box-shadow">
-          <PNPBasic />
-          <PNPDetails />
-          <PNPTrade />
-          <PNPLogistic />
-          <PNPProductDetail />
-          <NewProductBtns />
-        </div>
+        {NewProduct && (
+          <>
+            <h2 className="newProduct-title">New Product</h2>
+            <div className="box-shadow">
+              <PNPCategory />
+              <PNPBasic />
+              <PNPDetails />
+              <PNPTrade />
+              <PNPLogistic />
+              <PNPProductDetail />
+              <NewProductBtns />
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

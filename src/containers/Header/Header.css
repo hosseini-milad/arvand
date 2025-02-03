@@ -126,6 +126,40 @@
     }
   }
 }
+.header .notif-sidebar {
+  position: absolute;
+  top: 100px;
+  left: -300px;
+  width: 300px;
+  height: 100vh;
+  background-color: white;
+  z-index: 2;
+
+  transition: all ease-in-out 0.5s;
+
+  .title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    width: 100%;
+    padding: 0.5rem;
+    border-bottom: 1px solid lightgray;
+    position: relative;
+
+    i {
+      position: absolute;
+      left: 6px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+    }
+  }
+}
+.header .fade-in {
+  left: 0 !important;
+  -webkit-box-shadow: 4.5px 0 10px 3px rgba(0, 0, 0, 0.267);
+  -moz-box-shadow: 4.5px 0 10px 3px rgba(0, 0, 0, 0.267);
+  box-shadow: 4.5px 0 10px 3px rgba(0, 0, 0, 0.267);
+}
 @media (max-width: 1200px) {
   .header .container {
     max-width: 960px;
@@ -232,5 +266,26 @@
       font-size: 0.75rem;
       line-height: 18px;
     }
+  }
+}
+.header .mobile-icon-wrapper.mobile-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
+  max-width: 100%;
+
+  .ul-item.ul-item i {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+    position: relative;
+  }
+  .ul-item.ul-item i::before {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: auto;
   }
 }

@@ -3,8 +3,11 @@
   background-color: white;
   border-radius: 0.5rem 0.5rem 0 0;
   overflow: hidden;
+  margin-top: 1rem;
 }
-
+.newProduct-title {
+  margin-top: 1rem;
+}
 .PNPBasic {
   width: 100%;
 
@@ -142,7 +145,7 @@
   gap: 6px;
   width: 40%;
 }
-.PNPBasic .wrapper textarea{
+.PNPBasic .wrapper textarea {
   padding: 1rem;
   font-size: 15px;
 }

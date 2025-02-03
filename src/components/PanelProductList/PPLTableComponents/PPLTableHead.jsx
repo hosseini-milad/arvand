@@ -11,6 +11,8 @@ export default function PPLTableHead() {
         <th>Owner</th>
         <th>Last Update</th>
         <th>Status</th>
+        <th>Quantity</th>
+        <th>Price</th>
         <th>Action</th>
       </tr>
       

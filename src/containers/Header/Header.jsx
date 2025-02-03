@@ -12,9 +12,22 @@ export default function Header() {
     { title: "فارسی", link: "#" },
   ];
   const [SubMenu, setSubMenu] = useState(false);
+  const [NotifShow, setNotifShow] = useState(false);
   return (
     <header className="header">
       <div className="container">
+        <div className={`notif-sidebar ${NotifShow ? "fade-in" : ""}`}>
+          <p className="title">
+            پیام ها{" "}
+            <i
+              class="fa-solid fa-xmark"
+              onClick={() => setNotifShow(false)}
+            ></i>
+          </p>
+          <div className="notif-wrapper">
+            <div className="notif-item"></div>
+          </div>
+        </div>
         <div className="wrapper logo-wrapper">
           <a href="/">
             <picture>
@@ -41,14 +54,19 @@ export default function Header() {
             <i className="fa-solid fa-circle-user"></i>
             <div className="p-wrapper">
               <p>
-                <span className="hover">ورود</span>
+                <span
+                  className="hover"
+                  onClick={() => (window.location.href = "/login")}
+                >
+                  ورود
+                </span>
                 <span> / </span>
                 <span className="hover">پیوستن</span>
               </p>
               <p>حساب کاربری</p>
             </div>
           </div>
-          <div className="ul-item">
+          <div className="ul-item" onClick={() => setNotifShow(true)}>
             <i className="fa-solid fa-envelope auto-hover"></i>
             <div className="p-wrapper">
               <p>
@@ -65,32 +83,16 @@ export default function Header() {
               <ul>
                 {NavList.map((nav, n) => (
                   <li key={n} className="nav-item">
-                    <a href={nav.link}>
-                      {nav.title}
-                    </a>
+                    <a href={nav.link}>{nav.title}</a>
                   </li>
                 ))}
               </ul>
-              <div className="wrapper ul-wrapper">
+              <div className="wrapper ul-wrapper mobile-icon-wrapper">
                 <div className="ul-item">
                   <i className="fa-solid fa-circle-user"></i>
-                  <div className="p-wrapper">
-                    <p>
-                      <span className="hover">ورود</span>
-                      <span> / </span>
-                      <span className="hover">پیوستن</span>
-                    </p>
-                    <p>حساب کاربری</p>
-                  </div>
                 </div>
                 <div className="ul-item">
                   <i className="fa-solid fa-envelope auto-hover"></i>
-                  <div className="p-wrapper">
-                    <p>
-                      <span className="auto-hover">اعلانات</span>
-                    </p>
-                    <p className="auto-hover">پیام ها</p>
-                  </div>
                 </div>
               </div>
             </div>

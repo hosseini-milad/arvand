@@ -9,7 +9,9 @@ export default function PPLFIlters() {
             Manage Products
             <span>(Total 1)</span>
           </p>
-          <button className="add-btn">Post New</button>
+          <a href="/Dashboard/NewProduct" className="add-btn">
+            Post New
+          </a>
         </div>
         <div className="filter-wrapper">
           <div className="action">
@@ -26,7 +28,7 @@ export default function PPLFIlters() {
             </select>
           </div>
           <div className="search">
-            <input type="text" name="" id="" placeholder="Search product..."/>
+            <input type="text" name="" id="" placeholder="Search product..." />
             <button className="filter-btn">GO!</button>
           </div>
         </div>

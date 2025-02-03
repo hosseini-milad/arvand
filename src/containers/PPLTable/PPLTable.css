@@ -60,3 +60,13 @@
   border-radius: 0.2rem;
   cursor: pointer;
 }
+.PPLTable .num-center {
+}
+.PPLTable .num-input {
+  width: 150px;
+  padding: 0.5rem;
+  text-align: left;
+  outline: none;
+  border: none;
+  -moz-appearance: textfield;
+}
