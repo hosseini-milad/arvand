@@ -4,20 +4,15 @@ var Schema = mongoose.Schema;
 
 const ProductSchema = new Schema({
     title:  { type: String},
-    sku: { type: String},
-    partialSku: { type: String , unique: true},
+    sku: { type: String,unique:true},
+    ItemID: { type: String,unique:true},
     enTitle:String,
-    description:String,
-    brandId:String,
-    catId:String,
-    config:String,
     filters:{type:Object,default:{}},
-    uploadImage:String,
-    imageUrl: { type:String},
-    thumbUrl: {type:String},
-    imgGallery:String,
-    imgGalleryUrl:{type:String},
-    categories:{ type:String},
-    subItem:{ type:Array},
+    size:String,
+    weight:String,
+    length:String,
+    grade:String,
+    masterSku:String,
+    masterName:String
 })
 module.exports = mongoose.model('product',ProductSchema);

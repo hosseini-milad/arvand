@@ -5,6 +5,7 @@ const fs = require('fs')
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 const router = express.Router()
+const xlsx = require('node-xlsx');
 const auth = require("../middleware/auth");
 var ObjectID = require('mongodb').ObjectID;
 const { OLD_SITE_URL,API_PORT,StockId,SaleType} = process.env;
@@ -36,6 +37,8 @@ const calcSKU = require('../middleware/calcSKU');
 const FilterOptions = require('../models/product/FilterOptions');
 const tagproduct = require('../models/product/tagproduct');
 const ListTags = require('../middleware/ListTags');
+const master = require('../models/product/master');
+const UpdateExcel = require('../middleware/UpdateExcel');
 
 router.post('/fetch-service',jsonParser,async (req,res)=>{
     var serviceId = req.body.serviceId?req.body.serviceId:''
@@ -209,6 +212,7 @@ router.post('/list-product',jsonParser,async (req,res)=>{
         exists: req.body.exist?1:0,
         brand:req.body.brandId,
         active:req.body.active,
+        isMaster:req.body.isMaster,
         offset:req.body.offset,
         pageSize:pageSize
     }
@@ -268,6 +272,36 @@ router.post('/list-product',jsonParser,async (req,res)=>{
         res.status(500).json({message: error.message})
     } 
 })
+router.post('/list-product-master',jsonParser,async (req,res)=>{
+    var pageSize = req.body.pageSize?req.body.pageSize:"10";
+    var offset = req.body.offset?(parseInt(req.body.offset)):0;
+    try{const data={
+        category:req.body.category,
+        title:req.body.title,
+        sku:req.body.sku,
+        brand:req.body.brandId,
+        active:req.body.active,
+        offset:req.body.offset,
+        pageSize:pageSize
+    }
+        const products = await master.aggregate([
+            { $match:data.title?{$or:[{title:new RegExp('.*' + data.title + '.*')},
+                {sku:new RegExp('.*' + data.title + '.*', "i")}]}:{}},
+            { $match:data.sku?{sku:new RegExp('.*' + data.sku + '.*')}:{}},
+            { $match:data.category?{category:data.category}:{}},
+            { $match:data.active?{active:true}:{}},
+            ])
+            
+            const productList = products.slice(offset,
+                (parseInt(offset)+parseInt(pageSize)))  
+            const brandList = await BrandSchema.find()
+           res.json({filter:productList,brands:brandList,
+            size:products.length,exists:data.exists})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    } 
+})
 router.post('/editProduct',jsonParser,async(req,res)=>{
     var productId= req.body.productId?req.body.productId:''
     if(productId === "new")productId=''
@@ -276,10 +310,7 @@ router.post('/editProduct',jsonParser,async(req,res)=>{
             title:  req.body.title,
             catId: req.body.catId,
             brandId: req.body.brandId,
-            sharifId: req.body.sharifId,
             type:req.body.type,
-            filters:req.body.filters,
-            value:req.body.value,
             enTitle:req.body.enTitle,
             description:req.body.description,
             fullDesc:req.body.fullDesc,
@@ -287,19 +318,16 @@ router.post('/editProduct',jsonParser,async(req,res)=>{
             metaTitle: req.body.metaTitle,
             productMeta:req.body.productMeta,
             sku: req.body.sku,
-            productCode: req.body.productCode,
-            price: req.body.price,
-            quantity: req.body.quantity,
             sort: req.body.sort,
             imageUrl:  req.body.imageUrl,
             thumbUrl:  req.body.thumbUrl
         }
         ///var partialSku = 
         var productResult = ''
-        if(productId) productResult=await ProductSchema.updateOne({_id:productId},
+        if(productId) productResult=await master.updateOne({_id:productId},
             {$set:data})
         else
-        productResult= await ProductSchema.create(data)
+        productResult= await master.create(data)
         
         res.json({result:productResult,success:productId?"Updated":"Created"})
     }
@@ -340,7 +368,23 @@ router.post('/updateProduct',jsonParser,async(req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
-
+router.post('/updateProductExcel',jsonParser,async(req,res)=>{
+    var url= req.body.url
+    try{ 
+        const url = req.body.url
+        //const data = fs.readFileSync(url)
+        //console.log(data)
+        const workSheetsFromFile = xlsx.parse(
+            __dirname +"/../"+url);
+        const result = await UpdateExcel(workSheetsFromFile)
+        const data = workSheetsFromFile[0].data
+        const meliCodeIndex = data[0].indexOf("sku")
+        res.json({result})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
 
 var download =async function(uri, filename, callback){
     return new Promise(resolve => {

@@ -6,11 +6,10 @@ const CategorySchema = new mongoose.Schema({
     type:String,
     
     catCode:String,
-    parent: {type: mongoose.Schema.Types.ObjectId, ref: 'categories'},
+    parent: String,
     body:   String,
     description:String,
     color: String,
-    children:Array,
 
     imageUrl: String,
     iconUrl:  String,
