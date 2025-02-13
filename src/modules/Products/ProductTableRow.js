@@ -32,10 +32,6 @@ function ProductTableRow(props){
       })
 
   }
-  var newStockCount = (product.countTotal.length?product.countTotal:'')
-  var stockIndex = stockId?product.countTotal.findIndex(item=>item.Stock==stockId.StockID):-1
-  if(newStockCount&&stockIndex!==-1) newStockCount = newStockCount[stockIndex].quantity
-  if(newStockCount&&stockIndex==-1) newStockCount="ناموجود"
   return(<React.Fragment>
         <tr 
             className={activeAcc?"activeAccordion":"accordion"}>

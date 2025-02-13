@@ -14,6 +14,7 @@ import {
   defaultFilterValues,
   handleFilterChange,
 } from "../utils/filterUtils"; // Import the utility functions
+import UploadExcel from "../modules/Products/ProductComponent/UploadExcel";
 
 const cookies = new Cookies();
 
@@ -48,9 +49,6 @@ function Products(props) {
       exist:filters.exist,
       brand: filters.brand,
       brandId: filters.brandid,
-      dateFrom: filters.date && filters.date.dateFrom,
-      dateTo: filters.date && filters.date.dateTo,
-      access: "manager",
     };
     const postOptions = {
       method: "post",
@@ -61,7 +59,9 @@ function Products(props) {
       },
       body: JSON.stringify(body),
     };
-    fetch(env.siteApi + "/panel/product/list-product", postOptions)
+    fetch(env.siteApi + (filters.isMaster?
+      "/panel/product/list-product-master":
+      "/panel/product/list-product"), postOptions)
       .then((res) => res.json())
       .then(
         (result) => {
@@ -176,10 +176,7 @@ function Products(props) {
             <i className="fa-solid fa-plus"></i>
             <p>{tabletrans.addNew[lang]}</p>
           </div>
-          <div className="edit-btn" onClick={() => RefreshItems()}>
-            <i className="fa-solid fa-refresh"></i>
-            <p>{tabletrans.update[lang]}</p>
-          </div>
+          <UploadExcel />
         </div>
       </div>
       <div className="list-container">
