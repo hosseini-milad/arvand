@@ -480,6 +480,20 @@ router.post('/fetch-category',jsonParser,async (req,res)=>{
         res.status(500).json({message: error.message})
     } 
 })
+router.get('/list-category-site',jsonParser,async (req,res)=>{
+    try{
+    const catData = await category.find({$or:[
+        {parent:{$exists:false}},{parent:''}]}).lean()
+        for(var i=0;i<catData.length;i++){
+            catData[i].child = await category.find(
+                {parent:catData[i]&&catData[i].catCode})
+        }
+    res.json({filter:catData})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    } 
+})
 router.post('/list-category',jsonParser,async (req,res)=>{
     var pageSize = req.body.pageSize?req.body.pageSize:"10";
     var offset = req.body.offset?(parseInt(req.body.offset)):0;
