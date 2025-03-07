@@ -223,13 +223,11 @@ router.post('/list-product',jsonParser,async (req,res)=>{
             { $match:data.sku?{sku:new RegExp('.*' + data.sku + '.*')}:{}},
             { $match:data.category?{category:data.category}:{}},
         ])
-        const newProduct = await productCount.find({})
-            const productList = newProduct.slice(offset,
+            const productList = products.slice(offset,
                 (parseInt(offset)+parseInt(pageSize)))  
-            const typeUnique = [...new Set(productList.map((item) => item.brand))];
             const brandList = await BrandSchema.find()
            res.json({filter:productList,brands:brandList,
-            size:newProduct.length,exists:data.exists})
+            size:products.length,exists:data.exists})
     }
     catch(error){
         res.status(500).json({message: error.message})
