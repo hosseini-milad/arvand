@@ -65,7 +65,7 @@ router.post('/list',jsonParser,async (req,res)=>{
         offset:req.body.offset,
         pageSize:pageSize
     }
-        const productList = await ProductSchema.aggregate([
+        const productList = await master.aggregate([
             { $match:data.title?{title:new RegExp('.*' + data.title + '.*')}:{}},
             { $match:data.category?{category:data.category}:{}},
             
