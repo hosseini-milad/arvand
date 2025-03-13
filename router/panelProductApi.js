@@ -65,17 +65,15 @@ router.post('/list',jsonParser,async (req,res)=>{
         offset:req.body.offset,
         pageSize:pageSize
     }
-        const serviceList = await ServiceSchema.aggregate([
+        const productList = await ProductSchema.aggregate([
             { $match:data.title?{title:new RegExp('.*' + data.title + '.*')}:{}},
             { $match:data.category?{category:data.category}:{}},
             
             ])
-            const orderList = serviceList.slice(offset,
+            const orderList = productList.slice(offset,
                 (parseInt(offset)+parseInt(pageSize)))  
-            const typeUnique = [...new Set(serviceList.map((item) => item.category))];
             
-           res.json({filter:orderList,type:typeUnique,
-            size:serviceList.length})
+           res.json({filter:orderList,size:productList.length})
     }
     catch(error){
         res.status(500).json({message: error.message})
