@@ -9,7 +9,6 @@ const appApi = require('./appApi');
 const cartApi= require('./cartApi'); 
 const settingApi = require('./settingApi');
 const productApi = require('./productApi');
-const formApi = require('./formApi');
 const paymentApi = require('./paymentApi');
 const userApi = require('./userApi');
 const panelUserApi = require('./panelUserApi')
@@ -47,7 +46,6 @@ router.use('/setting', settingApi)
 router.use('/app', appApi)
 router.use('/cart', cartApi)
 router.use('/product', productApi)
-router.use('/form', formApi)
 router.use('/user', userApi)
 router.use('/payment',paymentApi)
 

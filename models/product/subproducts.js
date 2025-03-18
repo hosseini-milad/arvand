@@ -8,7 +8,7 @@ const SubProductSchema = new Schema({
     imageUrl: { type:String},
     thumbUrl: {type:String},
     filter: {type:Object}, 
-    perBox:Number,
-    price:String
+    value:{type:String},
+    perBox:Number
 })
 module.exports = mongoose.model('subproduct',SubProductSchema);

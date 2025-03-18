@@ -7,6 +7,7 @@ const ProductSchema = new Schema({
     sku: { type: String , unique: true},
     enTitle:String,
     description:String,
+    hasSub:Boolean,
     brandId:String,
     catId:String,
     config:String,

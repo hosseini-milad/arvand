@@ -31,6 +31,7 @@ const users = require('../models/auth/users');
 const products = require('../models/product/products');
 const UpdateMarket = require('../middleware/UpdateMarket');
 const crmlist = require('../models/crm/crmlist');
+const subproducts = require('../models/product/subproducts');
 
 router.post('/fetch-service',jsonParser,async (req,res)=>{
     var serviceId = req.body.serviceId?req.body.serviceId:''
@@ -167,6 +168,7 @@ router.post('/fetch-product',jsonParser,async (req,res)=>{
             res.json({filter:{}})
             return
         }
+        const subProduct = await subproducts.find({sku:productData.sku}).sort({"filter.value":1})
         const brandList = await BrandSchema.find({})
         const categoryList = await category.find({})
         const brandData = productData.brandId?
@@ -177,7 +179,7 @@ router.post('/fetch-product',jsonParser,async (req,res)=>{
             await Filters.find({"category._id":catData._id.toString()}):''
        
         res.json({filter:productData,brandList:brandList,categoryList:categoryList,
-        brandData:brandData,catData:catData,filterList:filterList})
+        brandData:brandData,catData:catData,filterList:filterList,subProduct})
     }
     catch(error){
         res.status(500).json({message: error.message})
@@ -286,6 +288,26 @@ router.post('/editProduct',jsonParser,async(req,res)=>{
         productResult= await ProductSchema.create(data)
         
         res.json({result:productResult,success:productId?"Updated":"Created"})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+router.post('/editSubProduct',jsonParser,async(req,res)=>{
+    var items = req.body.items
+    try{ 
+        var productResult = ''
+        var itemList = items
+        for(var i=0;i<itemList.length;i++){
+            var oldItem = await subproducts.findOne({_id:ObjectID(itemList[i]._id)})
+            if(oldItem)
+                await subproducts.updateOne({_id:ObjectID(itemList[i]._id)},
+                {$set:itemList[i]})
+            else
+                await subproducts.create(itemList[i])    
+        }
+        
+        res.json({result:"productResult",message:"done"})
     }
     catch(error){
         res.status(500).json({message: error.message})
