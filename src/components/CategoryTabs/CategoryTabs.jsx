@@ -20,7 +20,10 @@ export default function CategoryTabs(props) {
                 Tab.catCode === SelectedTab ? "active-tab" : ""
               }`}
             >
-              <img src={env.siteApiUrl + Tab.thumbUrl} alt={Tab.title} />
+              <img
+                src={Tab.thumbUrl ? env.siteApiUrl + Tab.thumbUrl : Light}
+                alt={Tab.title}
+              />
               <p>{Tab.title}</p>
             </div>
           ))}

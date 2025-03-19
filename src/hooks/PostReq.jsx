@@ -1,66 +1,55 @@
 import Cookies from "universal-cookie";
 import env from "../env";
 import ReactDOM from "react-dom/client";
-import { useState } from "react";
 import ShowError from "../components/Modals/ShowError";
+
 const PostReq = async (props) => {
   const cookies = new Cookies();
   const token = cookies.get(env.cookieName);
   const error = ReactDOM.createRoot(document.getElementById("error"));
-  const method = props.method ? props.method : "GET";
+  const method = props.method?.toUpperCase() || "GET";
   const body = props.body;
-  const header = {
+  const headers = {
     "Content-Type": "application/json",
-    "x-access-token": token && token.token,
-    userid: token && token.userId,
+    "x-access-token": token?.token,
+    userid: token?.userId,
+    ...props.headers, // Allow custom headers to be passed
   };
 
-  var options =
-    method == "GET"
-      ? {
-          method: "GET",
-          headers: header,
-        }
-      : method == "DELETE"
-      ? {
-          method: "DELETE",
-          headers: header,
-          body: JSON.stringify(body),
-        }
-      : {
-          method: "POST",
-          headers: header,
-          body: JSON.stringify(body),
-        };
-  const res = await fetch(env.siteApi + props.url, options)
-    .then((res) => res.json())
-    .then(
-      (result) => {
-        if (result.error) {
-          error.render(<ShowError text={result.error} color={result.color} />);
-          setTimeout(() => error.render(), 3000);
-        } else {
-          if (result.message) {
-            error.render(
-              <ShowError text={result.message} color={result.color} />
-            );
-            setTimeout(() => error.render(), 3000);
-          }
+  const options = {
+    method,
+    headers,
+    ...(method !== "GET" && method !== "HEAD"
+      ? { body: JSON.stringify(body) }
+      : {}),
+  };
 
-          return result;
-        }
-      },
-      (err) => {
-        if (err.status == "404") {
-          error.render(<ShowError text={"404"} color={err.color} />);
-          setTimeout(() => error.render(), 3000);
-        } else {
-          error.render(<ShowError text={err.message} color={err.color} />);
-          setTimeout(() => error.render(), 3000);
-        }
-      }
-    );
-  return res;
+  try {
+    const response = await fetch(env.siteApi + props.url, options);
+    const result = await response.json();
+
+    if (!response.ok) {
+      const errorMessage =
+        result.error || response.statusText || "An error occurred";
+      error.render(<ShowError text={errorMessage} color="red" />);
+      setTimeout(() => error.render(), 3000);
+      throw new Error(errorMessage);
+    }
+
+    if (result.message) {
+      error.render(
+        <ShowError text={result.message} color={result.color || "green"} />
+      );
+      setTimeout(() => error.render(), 3000);
+    }
+
+    return result;
+  } catch (err) {
+    const errorMessage = err.message || "An unexpected error occurred";
+    error.render(<ShowError text={errorMessage} color="red" />);
+    setTimeout(() => error.render(), 3000);
+    throw err;
+  }
 };
 
 export default PostReq;

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./CatCol.css";
+import Light from "../../assets/CatTabs/Light.webp";
+import env from "../../env";
 import PostReq from "../../hooks/PostReq";
 export default function CatCol() {
   const [Data, setData] = useState();
@@ -134,6 +136,14 @@ export default function CatCol() {
                   <div className="list-container">
                     {li.child.map((list, c) => (
                       <a href="#" key={c} className="sub">
+                        <img
+                          src={
+                            list.thumbUrl
+                              ? env.siteApiUrl + list.thumbUrl
+                              : Light
+                          }
+                          alt={list.title}
+                        />
                         {list.title}
                       </a>
                     ))}

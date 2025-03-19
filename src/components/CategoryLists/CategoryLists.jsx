@@ -1,5 +1,7 @@
 import React from "react";
+import Light from "../../assets/CatTabs/Light.webp";
 import "./CategoryLists.css";
+import env from "../../env";
 export default function CategoryLists(props) {
   const { SelectedTab, Data } = props;
   const CatList = Data && Data.find((item) => item.catCode === SelectedTab);
@@ -9,7 +11,15 @@ export default function CategoryLists(props) {
         <div className="list-wrapper">
           <ul>
             {CatList &&
-              CatList.child.map((list, i) => <li key={i}>{list.title}</li>)}
+              CatList.child.map((list, i) => (
+                <li key={i}>
+                  <img
+                    src={list.thumbUrl ? env.siteApiUrl + list.thumbUrl : Light}
+                    alt={list.title}
+                  />
+                  {list.title}
+                </li>
+              ))}
           </ul>
         </div>
       </div>
