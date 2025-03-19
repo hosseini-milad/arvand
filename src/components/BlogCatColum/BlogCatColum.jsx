@@ -1,7 +1,21 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./BlogCatColum.css";
 import "/node_modules/flag-icons/css/flag-icons.min.css";
+import PostReq from "../../hooks/PostReq";
 export default function BlogCatColum() {
+  const [Data, setData] = useState();
+  const FetchBlogCat = async () => {
+    const result = await PostReq({
+      method: "GET",
+      url: "/setting/blog-category",
+      body: {},
+    });
+    setData("");
+    setTimeout(() => setData(result), 200);
+  };
+  useEffect(() => {
+    FetchBlogCat();
+  }, []);
   const FlagList = [
     {
       title: "China",
@@ -50,7 +64,7 @@ export default function BlogCatColum() {
         <p>دسته بندی بلاگ</p>
       </div>
       <div className="BlogCatColum-container">
-        {FlagList.map((flag,i)=>(
+        {FlagList.map((flag, i) => (
           <a key={i} href={flag.href} className="flag-box">
             <i className={flag.icon}></i>
             <p>{flag.title}</p>

@@ -4,29 +4,26 @@ import Auto from "../../assets/CatTabs/Auto.webp";
 import Home from "../../assets/CatTabs/Home.webp";
 import Light from "../../assets/CatTabs/Light.webp";
 import Machinery from "../../assets/CatTabs/Machinery.webp";
+import env from "../../env";
 export default function CategoryTabs(props) {
-  const { SelectedTab, setSelectedTab } = props;
-  const TabList = [
-    { enTitle: "Home", img: Home, title: "ساختمانی بهداشتی" },
-    { enTitle: "Machine", img: Machinery, title: "تجهیزات متفرقه" },
-    { enTitle: "Light", img: Light, title: "تجهیزات الکترونیکی" },
-    { enTitle: "Auto", img: Auto, title: "تجهیزات مکانیکی" },
-  ];
+  const { SelectedTab, setSelectedTab, TabList } = props;
+
   return (
     <div className="CategoryTabs">
       <div className="CategoryTabs-container">
-        {TabList.map((Tab, i) => (
-          <div
-            key={i}
-            onClick={() => setSelectedTab(Tab.enTitle)}
-            className={`tab-item ${
-              Tab.enTitle === SelectedTab ? "active-tab" : ""
-            }`}
-          >
-            <img src={Tab.img} alt={Tab.enTitle} />
-            <p>{Tab.title}</p>
-          </div>
-        ))}
+        {TabList &&
+          TabList.map((Tab, i) => (
+            <div
+              key={i}
+              onClick={() => setSelectedTab(Tab.catCode)}
+              className={`tab-item ${
+                Tab.catCode === SelectedTab ? "active-tab" : ""
+              }`}
+            >
+              <img src={env.siteApiUrl + Tab.thumbUrl} alt={Tab.title} />
+              <p>{Tab.title}</p>
+            </div>
+          ))}
       </div>
     </div>
   );

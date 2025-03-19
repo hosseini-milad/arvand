@@ -1,7 +1,20 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./TricksColum.css";
-
+import PostReq from "../../hooks/PostReq";
 export default function TricksColum() {
+  const [Data, setData] = useState();
+  const FetchBlogs = async () => {
+    const result = await PostReq({
+      method: "GET",
+      url: "/setting/blog-post",
+      body: {},
+    });
+    setData("");
+    setTimeout(() => setData(result), 200);
+  };
+  useEffect(() => {
+    FetchBlogs();
+  }, []);
   const TrickList = [
     {
       icon: "./logoRaw.png",

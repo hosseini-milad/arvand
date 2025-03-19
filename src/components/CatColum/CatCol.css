@@ -17,7 +17,7 @@
       width: 100%;
       color: #fff;
       padding: 14px;
-      background-color:var(--color-900);
+      background-color: var(--color-900);
 
       font-size: 1rem;
       text-align: right;
@@ -38,15 +38,16 @@
     }
   }
 }
-.CatCol li{
+.CatCol li {
   width: 100%;
-  
 }
-.CatCol li:hover{
+.CatCol li:hover {
   width: 100%;
   background-color: lightgray;
 
-  .list-menu{display: flex;}
+  .list-menu {
+    display: flex;
+  }
 }
 .CatCol li a {
   display: flex;
@@ -57,7 +58,7 @@
   font-size: 0.8rem;
   height: 100%;
 }
-.CatCol .list-menu{
+.CatCol .list-menu {
   position: absolute;
   left: -400px;
   top: 0;
@@ -70,7 +71,7 @@
   justify-content: flex-start;
   padding: 1rem 1.5rem;
 }
-.CatCol .list-container{
+.CatCol .list-container {
   display: flex;
   width: 100%;
   flex-direction: column;
@@ -78,19 +79,19 @@
   justify-content: flex-start;
   gap: 0.5rem;
 
-  .list-title{
-    color:var(--color-500);
+  .list-title {
+    color: var(--color-500);
     font-size: 1rem;
   }
 
-  .sub{
-    font-size: 0.8rem;
+  .sub {
+    font-size: 1rem;
     text-decoration: none;
     padding: 0;
   }
 }
-@media (max-width: 1000px){
-  .CatCol{
+@media (max-width: 1000px) {
+  .CatCol {
     display: none;
   }
 }
