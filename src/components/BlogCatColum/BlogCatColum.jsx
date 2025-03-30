@@ -64,12 +64,12 @@ export default function BlogCatColum() {
         <p>دسته بندی بلاگ</p>
       </div>
       <div className="BlogCatColum-container">
-        {FlagList.map((flag, i) => (
-          <a key={i} href={flag.href} className="flag-box">
-            <i className={flag.icon}></i>
-            <p>{flag.title}</p>
-          </a>
-        ))}
+        {Data &&
+          Data.data.map((Blog, i) => (
+            <a key={i} href={Blog.link} className="flag-box">
+              <p>{Blog.title}</p>
+            </a>
+          ))}
       </div>
     </div>
   );
