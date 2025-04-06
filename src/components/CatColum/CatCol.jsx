@@ -17,109 +17,6 @@ export default function CatCol() {
   useEffect(() => {
     FetchCategory();
   }, []);
-  const CatList = [
-    {
-      title: "ساختمانی بهداشتی",
-      lists: [
-        {
-          title: "Underwear",
-          list: ["Bra", "Womens Panties", "Mens Briefs Boxers", "Shapers"],
-        },
-        { title: "Wedding", list: ["Dresses", "Gown"] },
-      ],
-    },
-    {
-      title: "سیستم های مکانیکی",
-      lists: [
-        {
-          title: "Coocking",
-          list: ["Bra", "Womens Panties", "Mens Briefs Boxers", "Shapers"],
-        },
-        { title: "Air", list: ["Dresses", "Gown"] },
-      ],
-    },
-    {
-      title: "سیستم های الکترونیکی",
-      lists: [
-        {
-          title: "Energy",
-          list: ["Bra", "Womens Panties", "Mens Briefs Boxers", "Shapers"],
-        },
-        { title: "Food", list: ["Dresses", "Gown"] },
-      ],
-    },
-    {
-      title: "Beauty & Personal Care ",
-      lists: [
-        {
-          title: "Baby",
-          list: ["Bra", "Womens Panties", "Mens Briefs Boxers", "Shapers"],
-        },
-        { title: "Hair", list: ["Dresses", "Gown"] },
-      ],
-    },
-    {
-      title: " Security & Protection ",
-      lists: [
-        {
-          title: "Police",
-          list: ["Bra", "Womens Panties", "Mens Briefs Boxers", "Shapers"],
-        },
-        { title: "CCTV", list: ["Dresses", "Gown"] },
-      ],
-    },
-    {
-      title: " Lights & Lighting ",
-      lists: [
-        {
-          title: "LED",
-          list: ["Bra", "Womens Panties", "Mens Briefs Boxers", "Shapers"],
-        },
-        { title: "Stage", list: ["Dresses", "Gown"] },
-      ],
-    },
-    {
-      title: " Automobiles  & Motorcycles ",
-      lists: [
-        {
-          title: "Moto",
-          list: ["Bra", "Womens Panties", "Mens Briefs Boxers", "Shapers"],
-        },
-        { title: "Valve", list: ["Dresses", "Gown"] },
-      ],
-    },
-    {
-      title: " Chemicals ",
-      lists: [
-        {
-          title: "Paint",
-          list: ["Bra", "Womens Panties", "Mens Briefs Boxers", "Shapers"],
-        },
-        { title: "Wall", list: ["Dresses", "Gown"] },
-      ],
-    },
-    {
-      title: " Food & Beverage ",
-      lists: [
-        {
-          title: "Can",
-          list: ["Bra", "Womens Panties", "Mens Briefs Boxers", "Shapers"],
-        },
-        { title: "Fresh", list: ["Dresses", "Gown"] },
-      ],
-    },
-    {
-      title: " Minerals & Metallurgy ",
-      lists: [
-        {
-          title: "Wire",
-          list: ["Bra", "Womens Panties", "Mens Briefs Boxers", "Shapers"],
-        },
-        { title: "AL", list: ["Dresses", "Gown"] },
-      ],
-    },
-  ];
-
   return (
     <div className="CatCol">
       <div className="CatCol-container">
@@ -138,8 +35,8 @@ export default function CatCol() {
                       <a href="#" key={c} className="sub">
                         <img
                           src={
-                            list.thumbUrl
-                              ? env.siteApiUrl + list.thumbUrl
+                            list.iconUrl
+                              ? env.siteApiUrl + list.iconUrl
                               : Light
                           }
                           alt={list.title}

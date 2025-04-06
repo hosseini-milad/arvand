@@ -14,7 +14,7 @@ export default function CategoryLists(props) {
               CatList.child.map((list, i) => (
                 <li key={i}>
                   <img
-                    src={list.thumbUrl ? env.siteApiUrl + list.thumbUrl : Light}
+                    src={list.iconUrl ? env.siteApiUrl + list.iconUrl : Light}
                     alt={list.title}
                   />
                   {list.title}
