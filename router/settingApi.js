@@ -17,6 +17,7 @@ const CartToSepidar = require('../middleware/CartToSepidar');
 const sepidarPOST = require('../middleware/SepidarPost');
 const Invoice = require('../models/product/Invoice');
 const InvoiceItems = require('../models/product/InvoiceItems');
+const orders = require('../models/orders/orders');
 
 const { BLOG_URL} = process.env;
 
@@ -219,4 +220,33 @@ router.get('/blog-category',jsonParser, async (req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
+router.get('/order-params',jsonParser, async (req,res)=>{
+    try{
+        const data = {
+            reason:["شخصی","مغازه دار","کارخانه","مجری"],
+            volume:["1 تن","2 تن","3 تن","5 تن"],
+            payMethod:["نقدی","اعتباری","چک یک ماهه","چک شش ماهه"]
+        }
+        res.json(data)
+    } 
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+router.post('/add-order',jsonParser, async (req,res)=>{
+    const data = req.body
+    try{
+        
+        if(!data){
+            res.json({error:"not found"})
+            return
+        }
+        const orderStatus = await orders.create(data)
+        res.json({data:orderStatus,message:"سفارش شما ثبت شد"})
+    } 
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+
 module.exports = router;

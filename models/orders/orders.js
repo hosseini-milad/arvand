@@ -1,9 +1,16 @@
 const mongoose = require("mongoose");
 
 const OrdersSchema = new mongoose.Schema({
-  userId:{type: mongoose.Schema.Types.ObjectId, ref: 'user'},
+  userId:{type: String},
   manageId: {type: String},
   orderNo:{type:String},
+  mobile:{type:String},
+  company:{type:String},
+  payMethod:{type:String},
+  volume:{type:String},
+  reason:{type:String},
+  imageUrl:{type:String},
+  loadDate:{ type: Date ,default:Date.now()}, 
 
   orderPrice:{type:String},
   orderCount:{type:String},
