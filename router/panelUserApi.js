@@ -5,6 +5,7 @@ const router = express.Router()
 const auth = require("../middleware/auth");
 var ObjectID = require('mongodb').ObjectID;
 const multer = require('multer');
+const mime = require('mime');
 const fs = require('fs');
 const user = require('../models/auth/users');
 const customer = require('../models/auth/customers');
@@ -617,9 +618,10 @@ var storage = multer.diskStorage(
 router.post('/upload',uploadImg.single('upload'), async(req, res, next)=>{
     const folderName = req.body.folderName?req.body.folderName:"temp"
     try{
-    // to declare some path to store your converted image
-    var matches = req.body.base64image.match(/^data:([A-Za-z-+/]+);base64,(.+)$/),
-    response = {};
+        const data = (req.body.base64image)
+        // to declare some path to store your converted image
+        var matches = await data.match(/^data:([A-Za-z-+./]+);base64,(.+)$/),
+        response = {};
     if (matches.length !== 3) {
     return new Error('Invalid input string');
     }
@@ -627,9 +629,9 @@ router.post('/upload',uploadImg.single('upload'), async(req, res, next)=>{
     response.data = new Buffer.from(matches[2], 'base64');
     let decodedImg = response;
     let imageBuffer = decodedImg.data;
-    //let type = decodedImg.type;
-    //let extension = mime.extension(type);
-    let fileName = `MGM-${Date.now().toString()+"-"+req.body.imgName}`;
+    let type = decodedImg.type;
+    let extension = mime.extension(type);
+    let fileName = `Arvand-${Date.now().toString()+"-"+req.body.imgName+"."+extension}`;
    var upUrl = `/upload/${folderName}/${fileName}`
     fs.writeFileSync("."+upUrl, imageBuffer, 'utf8');
     return res.send({"status":"success",url:upUrl});

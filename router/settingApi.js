@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const { default: fetch } = require("node-fetch");
 const jsonParser = bodyParser.json();
 const router = express.Router()
 const auth = require("../middleware/auth");
@@ -16,6 +17,8 @@ const CartToSepidar = require('../middleware/CartToSepidar');
 const sepidarPOST = require('../middleware/SepidarPost');
 const Invoice = require('../models/product/Invoice');
 const InvoiceItems = require('../models/product/InvoiceItems');
+
+const { BLOG_URL} = process.env;
 
 router.post('/sliders', async (req,res)=>{
     try{
@@ -152,6 +155,65 @@ router.post('/multi-sepidar',jsonParser,auth, async (req,res)=>{
         }})
         }
         res.json({data:sepidarResult,message:"orders process"})
+    } 
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+
+router.get('/blog-post',jsonParser, async (req,res)=>{
+    var postList = []
+    try{
+        const url = BLOG_URL+"/wp-json/wp/v2/posts"
+        const response = await fetch(url);
+        const result = await response.json();
+        if(!result){
+            res.json({error:"not found",result})
+            return
+        }
+        for(var i=0;i<result.length;i++){
+            if(i>4) break
+            var post=result[i]
+            const imageUrl = BLOG_URL+"/wp-json/wp/v2/media/"+post.featured_media
+            var imageReq = await fetch(imageUrl);
+            const postImage = await imageReq.json();
+            postList.push({
+                title:post.title.rendered,
+                link:post.link,
+                abstract:post.excerpt.rendered,
+                description:post.content.rendered,
+                image:postImage&&postImage.source_url,
+                imageDetail:postImage&&postImage.media_details,
+                date:post.date,
+            })
+        }
+        res.json({data:postList,url,message:"blog lists"})
+    } 
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+
+router.get('/blog-category',jsonParser, async (req,res)=>{
+    var postList = []
+    try{
+        const url = BLOG_URL+"/wp-json/wp/v2/categories"
+        const response = await fetch(url);
+        const result = await response.json();
+        if(!result){
+            res.json({error:"not found",result})
+            return
+        }
+        for(var i=0;i<result.length;i++){
+            if(i>4) break
+            var post=result[i]
+            postList.push({
+                title:post.name,
+                link:post.link,
+                count:post.count
+            })
+        }
+        res.json({data:postList,url,message:"blog Category"})
     } 
     catch(error){
         res.status(500).json({message: error.message})

@@ -5,6 +5,7 @@ const fs = require('fs')
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 const router = express.Router()
+const xlsx = require('node-xlsx');
 const auth = require("../middleware/auth");
 var ObjectID = require('mongodb').ObjectID;
 const { OLD_SITE_URL,API_PORT,StockId,SaleType} = process.env;
@@ -25,13 +26,19 @@ const openOrders = require('../models/orders/openOrders');
 const Filters = require('../models/product/Filters');
 const factory = require('../models/product/factory');
 const orders = require('../models/orders/orders');
+const Tags = require("../models/product/tag")
 const faktor = require('../models/product/faktor');
 const cart = require('../models/product/cart');
 const users = require('../models/auth/users');
 const products = require('../models/product/products');
 const UpdateMarket = require('../middleware/UpdateMarket');
 const crmlist = require('../models/crm/crmlist');
-const subproducts = require('../models/product/subproducts');
+const calcSKU = require('../middleware/calcSKU');
+const FilterOptions = require('../models/product/FilterOptions');
+const tagproduct = require('../models/product/tagproduct');
+const ListTags = require('../middleware/ListTags');
+const master = require('../models/product/master');
+const UpdateExcel = require('../middleware/UpdateExcel');
 
 router.post('/fetch-service',jsonParser,async (req,res)=>{
     var serviceId = req.body.serviceId?req.body.serviceId:''
@@ -58,17 +65,15 @@ router.post('/list',jsonParser,async (req,res)=>{
         offset:req.body.offset,
         pageSize:pageSize
     }
-        const serviceList = await ServiceSchema.aggregate([
+        const productList = await master.aggregate([
             { $match:data.title?{title:new RegExp('.*' + data.title + '.*')}:{}},
             { $match:data.category?{category:data.category}:{}},
             
             ])
-            const orderList = serviceList.slice(offset,
+            const orderList = productList.slice(offset,
                 (parseInt(offset)+parseInt(pageSize)))  
-            const typeUnique = [...new Set(serviceList.map((item) => item.category))];
             
-           res.json({filter:orderList,type:typeUnique,
-            size:serviceList.length})
+           res.json({filter:orderList,size:productList.length})
     }
     catch(error){
         res.status(500).json({message: error.message})
@@ -163,23 +168,33 @@ router.post('/fetch-product',jsonParser,async (req,res)=>{
             res.json({filter:{}})
             return
         } 
-        const productData = await ProductSchema.findOne({_id: ObjectID(productId)})
+        var productData = await ProductSchema.findOne({_id: ObjectID(productId)}).lean()
+        if(!productData) productData =  await master.findOne({_id: ObjectID(productId)}).lean()
         if(!productData){
             res.json({filter:{}})
             return
-        }
-        const subProduct = await subproducts.find({sku:productData.sku}).sort({"filter.value":1})
+        } 
+        const ListTagData = await ListTags(productData.sku)
         const brandList = await BrandSchema.find({})
         const categoryList = await category.find({})
         const brandData = productData.brandId?
             brandList.find(item=>item.brandCode==productData.brandId):''
         const catData = productData.catId?
             categoryList.find(item=>item.catCode==productData.catId):''
+        
         const filterList = catData?
-            await Filters.find({"category._id":catData._id.toString()}):''
-       
+            await Filters.findOne({"category":catData._id.toString()}):''
+        
+        var subItem=[]
+        var options = filterList&&await FilterOptions.find({filterId:filterList.enTitle}).lean()
+        for(var i=0;i<(options&&options.length);i++){
+            subItem.push({...options[i],value:i,
+                sku:calcSKU(catData,brandData,productData.sku,options[i].optionCode)})
+        }
+        productData.subItem = subItem
         res.json({filter:productData,brandList:brandList,categoryList:categoryList,
-        brandData:brandData,catData:catData,filterList:filterList,subProduct})
+            ListTagData,
+        brandData:brandData,catData:catData,filterList:filterList})
     }
     catch(error){
         res.status(500).json({message: error.message})
@@ -196,6 +211,7 @@ router.post('/list-product',jsonParser,async (req,res)=>{
         exists: req.body.exist?1:0,
         brand:req.body.brandId,
         active:req.body.active,
+        isMaster:req.body.isMaster,
         offset:req.body.offset,
         pageSize:pageSize
     }
@@ -204,52 +220,42 @@ router.post('/list-product',jsonParser,async (req,res)=>{
                 {sku:new RegExp('.*' + data.title + '.*', "i")}]}:{}},
             { $match:data.sku?{sku:new RegExp('.*' + data.sku + '.*')}:{}},
             { $match:data.category?{category:data.category}:{}},
-            { $match:data.active?{active:true}:{}},
-            { $match:data.brand?(data.brand=="unkown")?
-                {$or:[{brandId:{$exists:false}},{brandId:''}]}:{brandId:data.brand}:{}},
-            {$lookup:{from : "brands", 
-            localField: "brandId", foreignField: "brandCode", as : "brandInfo"}},
-            ])
-        const productsQuantity = await productCount.find({Stock:stockId})
-            var quantity = []
-            var price = []
-            const newProduct=[]
-            for(var i=0;i<products.length;i++){
-                const countData = productsQuantity.find(
-                    Item=>Item.ItemID==products[i].ItemID)
-                //const countStock = stockData?countData.find(item=>item.Stock==stockData):''
-                if(!countData||!countData.quantity) 
-                    if(!data.exists)continue
-                
-                if(newProduct.length>(pageSize+offset)){
-                    newProduct.push({})
-                    continue;
-                }
-                const countAll = await productCount.find(
-                    {ItemID:products[i].ItemID})
-                var openCount = 0
-                //if()
-                const openList = await openOrders.find({sku:products[i].sku,payStatus:"paid"})
-                for(var c=0;c<openList.length;c++) openCount+= parseInt(openList[c].count)
-                const priceData = await productPrice.findOne(
-                    {ItemID:products[i].ItemID,saleType:SaleType})
-                newProduct.push({
-                    ...products[i],
-                    price:priceData?priceData.price:'',
-                    taxPrice:NormalTax(products[i].price)/10,
-                    count:countData?countData.quantity:'',
-                    countTotal:countAll,
-                    openOrderCount:openCount
-                })
-            }
-            
-            const productList = newProduct.slice(offset,
+        ])
+            const productList = products.slice(offset,
                 (parseInt(offset)+parseInt(pageSize)))  
-            const typeUnique = [...new Set(productList.map((item) => item.brand))];
             const brandList = await BrandSchema.find()
            res.json({filter:productList,brands:brandList,
-            size:newProduct.length,exists:data.exists,
-            quantity:quantity,price:price})
+            size:products.length,exists:data.exists})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    } 
+})
+router.post('/list-product-master',jsonParser,async (req,res)=>{
+    var pageSize = req.body.pageSize?req.body.pageSize:"10";
+    var offset = req.body.offset?(parseInt(req.body.offset)):0;
+    try{const data={
+        category:req.body.category,
+        title:req.body.title,
+        sku:req.body.sku,
+        brand:req.body.brandId,
+        active:req.body.active,
+        offset:req.body.offset,
+        pageSize:pageSize
+    }
+        const products = await master.aggregate([
+            { $match:data.title?{$or:[{title:new RegExp('.*' + data.title + '.*')},
+                {sku:new RegExp('.*' + data.title + '.*', "i")}]}:{}},
+            { $match:data.sku?{sku:new RegExp('.*' + data.sku + '.*')}:{}},
+            { $match:data.category?{category:data.category}:{}},
+            { $match:data.active?{active:true}:{}},
+            ])
+            
+            const productList = products.slice(offset,
+                (parseInt(offset)+parseInt(pageSize)))  
+            const brandList = await BrandSchema.find()
+           res.json({filter:productList,brands:brandList,
+            size:products.length,exists:data.exists})
     }
     catch(error){
         res.status(500).json({message: error.message})
@@ -263,10 +269,7 @@ router.post('/editProduct',jsonParser,async(req,res)=>{
             title:  req.body.title,
             catId: req.body.catId,
             brandId: req.body.brandId,
-            sharifId: req.body.sharifId,
             type:req.body.type,
-            filters:req.body.filters,
-            value:req.body.value,
             enTitle:req.body.enTitle,
             description:req.body.description,
             fullDesc:req.body.fullDesc,
@@ -274,18 +277,16 @@ router.post('/editProduct',jsonParser,async(req,res)=>{
             metaTitle: req.body.metaTitle,
             productMeta:req.body.productMeta,
             sku: req.body.sku,
-            productCode: req.body.productCode,
-            price: req.body.price,
-            quantity: req.body.quantity,
             sort: req.body.sort,
             imageUrl:  req.body.imageUrl,
             thumbUrl:  req.body.thumbUrl
         }
+        ///var partialSku = 
         var productResult = ''
-        if(productId) productResult=await ProductSchema.updateOne({_id:productId},
+        if(productId) productResult=await master.updateOne({_id:productId},
             {$set:data})
         else
-        productResult= await ProductSchema.create(data)
+        productResult= await master.create(data)
         
         res.json({result:productResult,success:productId?"Updated":"Created"})
     }
@@ -346,7 +347,23 @@ router.post('/updateProduct',jsonParser,async(req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
-
+router.post('/updateProductExcel',jsonParser,async(req,res)=>{
+    var url= req.body.url
+    try{ 
+        const url = req.body.url
+        //const data = fs.readFileSync(url)
+        //console.log(data)
+        const workSheetsFromFile = xlsx.parse(
+            __dirname +"/../"+url);
+        const result = await UpdateExcel(workSheetsFromFile)
+        const data = workSheetsFromFile[0].data
+        const meliCodeIndex = data[0].indexOf("sku")
+        res.json({result})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
 
 var download =async function(uri, filename, callback){
     return new Promise(resolve => {
@@ -373,11 +390,11 @@ async function resizeImage(imageData,outUrl){
         width: 150,
         height: 150
     });
- 
+
     fs.writeFileSync("."+outUrl, image);
 }
 
-/*Product*/
+/*Brands*/
 router.post('/fetch-brand',jsonParser,async (req,res)=>{
     var brandId = req.body.brandId?req.body.brandId:''
     try{
@@ -480,6 +497,20 @@ router.post('/fetch-category',jsonParser,async (req,res)=>{
         res.status(500).json({message: error.message})
     } 
 })
+router.get('/list-category-site',jsonParser,async (req,res)=>{
+    try{
+    const catData = await category.find({$or:[
+        {parent:{$exists:false}},{parent:''}]}).lean()
+        for(var i=0;i<catData.length;i++){
+            catData[i].child = await category.find(
+                {parent:catData[i]&&catData[i].catCode})
+        }
+    res.json({filter:catData})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    } 
+})
 router.post('/list-category',jsonParser,async (req,res)=>{
     var pageSize = req.body.pageSize?req.body.pageSize:"10";
     var offset = req.body.offset?(parseInt(req.body.offset)):0;
@@ -538,6 +569,90 @@ router.post('/editCats',jsonParser,async(req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
+
+
+/*Tags*/
+router.post('/list-tags',jsonParser,async (req,res)=>{
+    var pageSize = req.body.pageSize?req.body.pageSize:"10";
+    var offset = req.body.offset?(parseInt(req.body.offset)):0;
+    try{const data={
+        category:req.body.category,
+        search:req.body.search,
+        sku:req.body.sku,
+        offset:req.body.offset,
+        pageSize:pageSize
+    }
+        const tagData = await ListTags('',data.search)
+            
+           res.json({data:tagData})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    } 
+})
+router.post('/update-tag',jsonParser,auth,async(req,res)=>{
+    var tagId= req.body.tagId?req.body.tagId:''
+    if(tagId === "new")tagId=''
+    try{ 
+        const data = {
+            title:  req.body.title,
+            enTitle: req.body.enTitle,
+            sku: req.body.sku
+        }
+        var tagResult = ''
+        //const brandDetail = await BrandSchema.updateOne({_id:ObjectID(brandId)})
+        if(tagId) tagResult=await Tags.updateOne({_id:ObjectID(tagId)},
+            {$set:data})
+        else{
+
+            tagResult= await Tags.create(data)
+            await tagproduct.create(data)
+        }
+        
+        res.json({result:tagResult,success:tagId?"Updated":"Created"})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+router.post('/update-product-tag',jsonParser,auth,async(req,res)=>{
+    try{ 
+        const data = {
+            title:  req.body.title,
+            sku: req.body.sku
+        }
+        
+        var tagResult = await tagproduct.deleteMany({sku:data.sku})
+        if(!data.title){
+            res.json({message:"انجام شد"})
+            return
+        } 
+        //const brandDetail = await BrandSchema.updateOne({_id:ObjectID(brandId)})
+        for(var i=0;i<data.title.length;i++){
+            var tag = data.title[i]
+            await tagproduct.create({sku:data.sku,title:tag.title})
+        }
+         
+        const ListTagData = await ListTags(data.sku)
+        res.json({result:ListTagData})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+router.post('/delete-tag',jsonParser,auth,async(req,res)=>{
+    var tagId= req.body.tagId?req.body.tagId:''
+    try{
+        var tagResult = ''
+        if(tagId) tagResult=await Tags.deleteOne({_id:ObjectID(brandId)})
+        
+        res.json({result:tagResult,success:tagId?"deleted":""})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+
 /*Filters*/
 router.post('/fetch-filter',jsonParser,async (req,res)=>{
     var filterId = req.body.filterId?req.body.filterId:''
@@ -548,6 +663,8 @@ router.post('/fetch-filter',jsonParser,async (req,res)=>{
         }
         const categoryData = await category.find()
         const filterData = await Filters.findOne({_id: ObjectID(filterId)})
+        const categoryInfo = await category.findOne({_id:ObjectID(filterData.category)})
+        filterData.category = categoryInfo&&categoryInfo.title
        res.json({filter:filterData,category:categoryData})
     }
     catch(error){
@@ -804,6 +921,82 @@ router.post('/report-total',jsonParser,auth,async(req,res)=>{
         res.json({data:sortList,marketList:managerList,
             errorPrice:errorPrice,userList,brandList,
             totalCount,totalPrice,marketData,brandData})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+router.post('/add-option',jsonParser,async(req,res)=>{
+    const data = req.body
+    if(!data){
+        res.status(400).json({error:"no data"})
+        return
+    }
+    if(!data.title||!data.filter||!data.code){
+        res.status(400).json({error:"اطلاعات کامل نیست"})
+        return
+    }
+    try{ 
+        var options = await FilterOptions.create(
+            {filterId:  data.filter,
+                optionTitle:data.title,
+                optionCode:data.code,
+                sort:0})
+        const optionList = await FilterOptions.find({filterId:data.filter})
+        res.json({data:optionList})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+router.post('/list-option',jsonParser,async(req,res)=>{
+    const filterId = req.body.filterId
+    if(!filterId){
+        res.status(400).json({error:"کد فیلتر وارد نشده است"})
+        return
+    }
+    try{ 
+        const optionList = await FilterOptions.find({filterId:filterId})
+        res.json({data:optionList})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+router.post('/remove-option',jsonParser,async(req,res)=>{
+    const optionId = req.body.optionId
+    const filterId = req.body.filterId
+    if(!optionId||!filterId){
+        res.status(400).json({error:"کد آپشن وارد نشده است"})
+        return
+    }
+    try{ 
+        await FilterOptions.deleteOne({_id:ObjectID(optionId)})
+        const optionList = await FilterOptions.find({filterId:filterId})
+        res.json({data:optionList})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+router.post('/add-filter',jsonParser,async(req,res)=>{
+    const data = req.body
+    if(!data){
+        res.status(400).json({error:"no data"})
+        return
+    }
+    if(!data.title||!data.filter||!data.code){
+        res.status(400).json({error:"اطلاعات کامل نیست"})
+        return
+    }
+    try{ 
+        var filterData = await FilterOptions.create(
+            {   title:  data.title,
+                enTitle:data.enTitle,
+                category:data.category,
+                sort:0})
+        
+        res.json({data:filterData})
     }
     catch(error){
         res.status(500).json({message: error.message})

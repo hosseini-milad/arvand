@@ -33,7 +33,6 @@ router.get('/main', async (req,res)=>{
     try{
         const sliders = await slider.find()
 
-        //logger.warn("main done")
         res.json({sliders:sliders})
     }
     catch(error){

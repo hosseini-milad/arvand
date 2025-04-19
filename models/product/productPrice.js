@@ -13,6 +13,6 @@ const ProductPriceSchema = new Schema({
     existAlert:Number,
     perBox:Number,
     minSell:Number,
-    date:{ type: Date }
+    date:{ type: Date } 
 })
 module.exports = mongoose.model('productprice',ProductPriceSchema);
