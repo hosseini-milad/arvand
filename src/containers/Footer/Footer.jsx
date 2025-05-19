@@ -1,10 +1,10 @@
 import React from "react";
 import "./footer.css";
-import banner1 from "../../assets/Footer/Banner-1.webp"
-import banner2 from "../../assets/Footer/Banner-2.webp"
-import banner3 from "../../assets/Footer/Banner-3.webp"
-import banner4 from "../../assets/Footer/Banner-4.webp"
-import Gp from "../../assets/Footer/google-play.webp"
+import banner1 from "../../assets/Footer/Banner-1.webp";
+import banner2 from "../../assets/Footer/Banner-2.webp";
+import banner3 from "../../assets/Footer/Banner-3.webp";
+import banner4 from "../../assets/Footer/Banner-4.webp";
+import Gp from "../../assets/Footer/google-play.webp";
 export default function Footer() {
   return (
     <footer className="footer">
@@ -14,19 +14,19 @@ export default function Footer() {
             <div className="ul-header">درباره ما</div>
             <ul>
               <li>
-                <a href="#">About eWorldTrade</a>
+                <a href="#">درباره آروند پلیمر</a>
               </li>
               <li>
-                <a href="#">Representative Offices</a>
+                <a href="#">دفاتر نمایندگی</a>
               </li>
               <li>
-                <a href="#">Countries</a>
+                <a href="#">کشورها</a>
               </li>
               <li>
-                <a href="#">Learning Center</a>
+                <a href="#">مرکز آموزش</a>
               </li>
               <li>
-                <a href="#">Blog</a>
+                <a href="#">وبلاگ</a>
               </li>
             </ul>
           </div>
@@ -34,19 +34,19 @@ export default function Footer() {
             <div className="ul-header">قوانین و مقررات</div>
             <ul>
               <li>
-                <a href="#">Privacy Policy</a>
+                <a href="#">سیاست حفظ حریم خصوصی</a>
               </li>
               <li>
-                <a href="#">Terms & Conditions</a>
+                <a href="#">شرایط و ضوابط</a>
               </li>
               <li>
-                <a href="#">IPR Policy</a>
+                <a href="#">سیاست مالکیت معنوی</a>
               </li>
               <li>
-                <a href="#">Product Listing Policy</a>
+                <a href="#">سیاست فهرست محصولات</a>
               </li>
               <li>
-                <a href="#">鄂ICP备19025023号</a>
+                <a href="#">آروند پلیمر</a>
               </li>
             </ul>
           </div>
@@ -54,43 +54,39 @@ export default function Footer() {
             <div className="ul-header">تماس با ما</div>
             <ul>
               <li>
-                <a href="#">Post your Requirement</a>
+                <a href="#">ارسال درخواست شما</a>
               </li>
               <li>
-                <a href="#">+1 (469) 551-5690</a>
+                <a href="#">+9811223344</a>
               </li>
               <li>
-                <a href="#">support@eworldtrade.com</a>
+                <a href="#">آروند پلیمر</a>
               </li>
               <li>
-                <a href="#">
-                  1910 Pacific Avenue, <br />
-                  Suit No. 8025, Dallas, Texas United States{" "}
-                </a>
+                <a href="#">آروند پلیمر</a>
               </li>
-              
             </ul>
           </div>
           <div className="ul-list ul-pic">
             <ul>
               <li>
                 <a href="#">
-                  <img src={banner1} alt="Banner1" />
+                  <img src={banner1} alt="banner1" />
                 </a>
               </li>
               <li>
                 <a href="#">
-                  <img src={banner2} alt="Banner2" />
+                  <img src={banner2} alt="banner2" />
                 </a>
               </li>
               <li>
                 <a href="#">
-                  <img src={banner3} alt="Banner3" />
+                  <img src={banner3} alt="banner3" />
                 </a>
               </li>
               <li>
                 <a href="#">
-                  <img src={banner4} alt="Banner4" />
+                  <img src={banner4} alt="banner4" />
                 </a>
               </li>
             </ul>
@@ -98,10 +94,10 @@ export default function Footer() {
         </div>
         <div className="icon-wrapper">
           <a href="#">
-            <img src="./Logo.png" alt="logo" style={{maxWidth:"150px"}}/>
+            <img src="./Logo.png" alt="Logo" style={{ maxWidth: "150px" }} />
           </a>
           <a href="#">
-            <img src={Gp} alt="google play" style={{minWidth:"140px"}}/>
+            <img src={Gp} alt="googlePlay" style={{ minWidth: "140px" }} />
           </a>
           <ul className="ul-icon">
             <li>
@@ -128,14 +124,14 @@ export default function Footer() {
         </div>
         <div className="description-wrapper">
           <p>
-            All Offers/Products/Company Profiles/Images and other user-posted
-            contents are posted by the user and eWorldTrade.com shall not be
-            detained accountable for any such content.
+            تمامی پیشنهادات، محصولات، پروفایل شرکت‌ها، تصاویر و سایر محتواهای
+            ارسال شده توسط کاربران است و آروند پلیمر هیچ مسئولیتی در قبال این
+            محتواها ندارد.
           </p>
         </div>
       </div>
       <div className="copyright">
-        <p> Copyrights © 2024 eworldtrade.com, All Rights Reserved </p>
+        <p>کلیه حقوق این سایت متعلق به آروند پلیمر می‌باشد © ۲۰۲۴</p>
       </div>
     </footer>
   );
