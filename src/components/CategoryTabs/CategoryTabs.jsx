@@ -21,7 +21,7 @@ export default function CategoryTabs(props) {
               }`}
             >
               <img
-                src={Tab.thumbUrl ? env.siteApiUrl + Tab.thumbUrl : Light}
+                src={Tab.iconUrl ? env.siteApiUrl + Tab.iconUrl : Light}
                 alt={Tab.title}
               />
               <p>{Tab.title}</p>
