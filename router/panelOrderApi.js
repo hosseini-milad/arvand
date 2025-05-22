@@ -71,66 +71,7 @@ router.post('/list',jsonParser,async (req,res)=>{
     var isSale = 0
     var isWeb = 0
     var size = 0
-    if(!type||type=="Visitor"){  
-        if(adminData.access=="sale"){
-            res.status(400).json({error: "دسترسی به این بخش ندارید"}) 
-            return
-        }  
-        var showCart=[]
-        const cartList = await carts.aggregate([
-        { $addFields: { "userId": { "$toObjectId": "$userId" }}},
-        {$lookup:{
-            from : "customers", 
-            localField: "userId", 
-            foreignField: "_id", 
-            as : "userInfo"
-        }},
-        {$lookup:{
-            from : "tasks", 
-            localField: "cartNo", 
-            foreignField: "orderNo", 
-            as : "taskInfo"
-        }},
-        { $match:data.orderNo?{cartNo:new RegExp('.*' + data.orderNo + '.*')}:{}},
-        { $match: {$or:[{isSale:{$exists:false}},{isSale:"0"}]}},
-        { $match:!data.orderNo?{initDate:{$gte:new Date(data.dateFrom)}}:{}},
-        { $match:!data.orderNo?{initDate:{$lte:new Date(data.dateTo)}}:{}},
-        { $sort: {"initDate":-1}}
-        
-    ])
-    for(var i=0;i<(cartList&&cartList.length);i++){
-        if(data.customer){
-            if(cartList[i].userInfo[0]){
-                var userSimilar = cartList[i].userInfo[0].username&&
-                cartList[i].userInfo[0].username.includes(data.customer)
-                var phoneSimilar = cartList[i].userInfo[0].phone&&
-                cartList[i].userInfo[0].phone.includes(data.customer)
-                if(!userSimilar&&!phoneSimilar)
-                    continue
-            }
-            else{
-                continue
-            }
-        }
-        var cartTask = cartList[i].taskInfo&&cartList[i].taskInfo[0]
-        if(data.status){
-            if(cartTask.taskStep !== data.status)
-                continue 
-        }
-        var totalPrice=findCartSum(cartList[i].cartItems,
-            cartList[i].payValue)
-        showCart.push({...cartList[i],totalCart:totalPrice})
-    } 
-    brandUnique = [...new Set(showCart&&
-        showCart.map((item) => item.brand))];
-    size = showCart&&showCart.length
-    const orderList = showCart&&showCart.slice(offset,
-        (parseInt(offset)+parseInt(pageSize)))  
     
-    resultData = orderList 
-    }
-    if(type=="WebSite"){
-        isWeb = 1
         const reportList = await orders.aggregate([
             {$lookup:{
                 from : "customers", 
@@ -147,78 +88,10 @@ router.post('/list',jsonParser,async (req,res)=>{
             { $sort: {"date":-1}},
         
             ])
-        var filter1Report = data.customer?
-        reportList.filter(item=>(item.userInfo[0]&&item.userInfo[0].cName&&
-            item.userInfo[0].cName.includes(data.customer))):reportList;
+        var filter1Report = reportList;
             
-        resultData = orderList
-    }
-    if(type=="Sale"){     
-        if(adminData.access=="market"){
-            res.status(400).json({error: "دسترسی به این بخش ندارید"})
-            return 
-        }  
-        var isSale = 1
-        var showCart=[]
-        const openList = await carts.aggregate([
-            { $addFields: { "userId": { "$toObjectId": "$userId" }}},
-            {$lookup:{
-                from : "customers", 
-                localField: "userId", 
-                foreignField: "_id", 
-                as : "userInfo"
-            }}, 
-            { $match: {InvoiceID:{$exists:false}}},
-            { $match: {isSale:"1"}},
-            { $match:data.orderNo?{cartNo:new RegExp('.*' + data.orderNo + '.*')}:{}},
-        
-            { $match:!data.orderNo?{initDate:{$gte:new Date(data.dateFrom)}}:{}},
-            { $match:!data.orderNo?{initDate:{$lte:new Date(data.dateTo)}}:{}},
-            { $sort: {"initDate":-1}}
-            ])
-        for(var i=0;i<(openList&&openList.length);i++){
-            var totalPrice=findCartSum(openList[i].cartItems,
-                openList[i].payValue)
-            showCart.push({...openList[i],totalCart:totalPrice})
-        }
-        brandUnique = [...new Set(showCart&&
-            showCart.map((item) => item.brand))];
-        size = showCart&&showCart.length
-        const orderList = showCart&&showCart.slice(offset,
-            (parseInt(offset)+parseInt(pageSize)))      
-        resultData = orderList
-    }
-    if(type=="Invoice"){     
-        if(adminData.access=="market"){
-            res.status(400).json({error: "دسترسی به این بخش ندارید"})
-            return 
-        }  
-        var showCart=[]
-        const invoiceList = await Invoice.aggregate([
-            {$lookup:{
-                from : "customers", 
-                localField: "CustomerRef", 
-                foreignField: "CustomerID", 
-                as : "userInfo"
-            }}, 
-            {$lookup:{
-                from : "invoiceitems", 
-                localField: "InvoiceID", 
-                foreignField: "InvoiceID", 
-                as : "invoiceItems"
-            }},
-            { $sort: {"Date":-1}}
-            ])
-        for(var i=0;i<(invoiceList&&invoiceList.length);i++){
-            var totalPrice=findCartSum(invoiceList[i].cartItems,3)
-            showCart.push({...invoiceList[i],totalCart:totalPrice})
-        }
-        size = showCart&&showCart.length
-        const orderList = showCart&&showCart.slice(offset,
-            (parseInt(offset)+parseInt(pageSize)))      
-        resultData = orderList
-    }
-
+        resultData = filter1Report
+    
        res.json({filter:resultData,brand:brandUnique, isSale,
         size}) 
     }
