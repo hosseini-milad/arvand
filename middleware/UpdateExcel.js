@@ -35,7 +35,7 @@ const updateMaster=async(rawData)=>{
       var query = {
         title:data[i][1],
         enTitle:data[i][2],
-        productUrl:data[i][2],
+        productUrl:data[i][2], 
         catCode:data[i][3],
         category2:data[i][4],
         brandCode:data[i][5],

@@ -241,6 +241,7 @@ router.post('/add-order',jsonParser, async (req,res)=>{
             res.json({error:"not found"})
             return
         }
+        data.status = "inprogress"
         const orderStatus = await orders.create(data)
         res.json({data:orderStatus,message:"سفارش شما ثبت شد"})
     } 
