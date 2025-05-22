@@ -32,6 +32,7 @@ const FindCurrentExist = require('../middleware/CurrentExist');
 const OrderToTask = require('../middleware/OrderToTask');
 const IsToday = require('../middleware/IsToday');
 const NewQuote = require('../middleware/NewQuote');
+const orders = require('../models/orders/orders');
 const {TaxRate} = process.env
 
 router.post('/products', async (req,res)=>{
@@ -630,45 +631,11 @@ router.post('/cart-delete',auth, async (req,res)=>{
     }
 })
 router.post('/cart-find', async (req,res)=>{
-    const cartNo=req.body.cartNo
+    const orderId=req.body._id
     try{
-        const cartList = await cart.aggregate
-        ([{$match:{cartNo:cartNo}},
-        { $addFields: { "manageId": { "$toObjectId": "$manageId" }}},
-        { $addFields: { "userId": { "$toObjectId": "$userId" }}},
-        {$lookup:{
-            from : "customers", 
-            localField: "userId", 
-            foreignField: "_id", 
-            as : "userData"
-        }},
-        {$lookup:{
-            from : "users", 
-            localField: "manageId", 
-            foreignField: "_id", 
-            as : "managerData"
-        }}])
-        const cartData =cartList&&cartList[0] 
-        var canEdit = 0
-        var taskData = await OrderToTask(cartData.cartNo)
-        if(taskData&&(
-            taskData.taskStep== "initial"||taskData.taskStep=="edit")) 
-            canEdit = 1
+        const cartList = await orders.findOne({_id:ObjectID(orderId)})
         
-        if(!cartData){
-            res.status(400).json({error:"error",message:"آیتم ها با مشکل مواجه شدند"})
-             return
-        } 
-        var cartItems = cartData.cartItems
-        if(cartItems)
-            for(var i=0;i<cartItems.length;i++){
-            cartList[0].cartItems[i].total =findCartItemDetail(cartItems[i],cartData.payValue)
-            
-        }
-        var orderData=findQuickCartSum(cartItems,cartData.payValue,
-            cartData.discount)
-        
-        res.json({cart:cartList,orderData:orderData,canEdit,taskData})
+        res.json({cart:cartList})
     }
     catch(error){
         res.status(500).json({message: error.message})
