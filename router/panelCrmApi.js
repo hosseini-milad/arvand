@@ -86,7 +86,7 @@ const calcTasks=async(userId)=>{
             var Message = taskList[c].result.Message
             taskList[c].result = {Number,InvoiceID,Message}
         }
-        var taskStep = taskList[c].taskStep
+        var taskStep = taskList[c].status
         var yesterday = new Date(Date.now() - 86400000); // that is: 24 * 60 * 60 * 1000
         var taskDate = taskList[c].progressDate?taskList[c].progressDate:
             taskList[c].date
