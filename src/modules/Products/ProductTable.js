@@ -21,19 +21,11 @@ function ProductTable(props){
               <i></i>
             </th>
             <th>
-              <p>{tabletrans.item[lang]}</p>
-              <i></i>
-            </th>
-            <th>
             <p>{tabletrans.price[lang]}</p>
               <i></i>
             </th>
             <th>
             <p>{tabletrans.countanbar[lang]}</p>
-              <i></i>
-            </th>
-            <th>
-            <p>{tabletrans.taxPrice[lang]}</p>
               <i></i>
             </th>
             <th>

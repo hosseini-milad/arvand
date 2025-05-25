@@ -1,10 +1,10 @@
 
 const env={
-    //siteApi:'http://localhost:6690/api',
-    siteApi:'https://admin.deepware.ir/api',
+    siteApi:'http://localhost:6690/api',
+    //siteApi:'https://admin.deepware.ir/api',
     
-    //siteApiUrl:'http://localhost:6690',
-    siteApiUrl:'https://admin.deepware.ir',
+    siteApiUrl:'http://localhost:6690',
+    //siteApiUrl:'https://admin.deepware.ir',
     cookieName:'arvand-login',
     //cookieName:'panel-login',
     //cookieName:'mehr-login',

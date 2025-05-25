@@ -112,7 +112,7 @@ function ProductDetailHolder(props) {
                 setUpdateContent={setUpdateContent}
                 setContent={setContent}
               />
-              {url === "new" || content ? (
+              {(url === "new" || content &&0)? (
                 <ProductSKU
                   direction={direction}
                   lang={lang}
@@ -124,7 +124,7 @@ function ProductDetailHolder(props) {
               ) : (
                 <></>
               )}
-              {loader?<></>:<ProductTags direction={direction} lang={lang} content={content} 
+              {loader||1?<></>:<ProductTags direction={direction} lang={lang} content={content} 
                 productChange={productChange} setProductChange={setProductChange}
                 token={token} setLoader={setLoader}/>}
               <div className="create-btn-wrapper">

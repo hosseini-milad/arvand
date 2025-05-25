@@ -15,10 +15,8 @@ function TaskData(props){
                     findPriority(taskData.priority)+"task"}>
                     {taskData.taskId}</h3>
                 <ul>
-                    <li>{creator&&creator.length?
-                        creator[0].username:''}</li>
-                    {customer&&customer.length?
-                    <li>{customer[0].username}</li>:<></>}
+                    <li>{taskData.mobile?taskData.mobile:''}</li>
+                    <li>{taskData.company?taskData.company:''}</li>
                     <li>{new Date(taskData.date).toLocaleDateString('fa')}</li>
                 </ul>
             </div>

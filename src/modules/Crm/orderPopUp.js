@@ -21,7 +21,7 @@ function OrderPopUp(props){
         const postOptions={
             method:'post',
             headers: {'Content-Type': 'application/json'},
-            body:JSON.stringify({cartNo:data?data.orderNo:''})
+            body:JSON.stringify({_id:data?data._id:''})
           }
       fetch(env.siteApi + "/panel/faktor/cart-find",postOptions)
       .then(res => res.json())
@@ -36,108 +36,7 @@ function OrderPopUp(props){
           console.log(error);
         })
     },[])
-    console.log(data)
-    const updateTotal =()=>{
-        const postOptions={
-            method:'post',
-            headers: {'Content-Type': 'application/json',
-            "x-access-token":token&&token.token,"userId":token&&token.userId},
-            body:JSON.stringify({...data,crmId:props.crm?props.crm._id:''})
-          }
-          console.log(postOptions)
-      fetch(env.siteApi + "/panel/crm/update-tasks",postOptions)
-      .then(res => res.json())
-      .then(
-        (result) => {
-            if(result.error){}
-            else{
-                props.setBoardArray(result.taskData)
-            }
-        },
-        (error) => {
-          console.log(error);
-        }
-      )
-    }
-    const addToCart =(newData)=>{
-        const postOptions={
-            method:'post',
-            headers: {'Content-Type': 'application/json',
-            "x-access-token":token&&token.token,"userId":token&&token.userId},
-            body:JSON.stringify({cartNo:data.orderNo,data:newData})
-          }
-      fetch(env.siteApi + "/panel/faktor/edit-addCart",postOptions)
-      .then(res => res.json())
-      .then(
-        (result) => {
-            if(result.error){
-                setError({message:result.error,color:"brown"})
-                setTimeout(()=>setError({message:'',
-                    color:"brown"}),3000)
-            }
-            else{
-                setContent(result)
-                setError({message:result.message,color:"green"})
-                setTimeout(()=>setError({message:'',
-                    color:"brown"}),3000)
-            }
-        },
-        (error) => {
-          console.log(error);
-        }
-      )
-    }
-    const removeItem=(rData)=>{
-        const postOptions={
-            method:'post',
-            headers: { 'Content-Type': 'application/json' ,
-            "x-access-token": token&&token.token,
-            "userId":token&&token.userId},
-            body:JSON.stringify(
-                {cartNo:data.orderNo,
-                cartID:rData.cartID})
-          }
-        fetch(env.siteApi + "/panel/faktor/edit-removeCart",postOptions)
-        .then(res => res.json())
-        .then(
-            (result) => {
-                if(result.error){
-                    setError({message:result.error,color:"brown"})
-                    setTimeout(()=>setError({message:'',
-                        color:"brown"}),3000)
-                }
-                else{
-                    setContent(result) 
-                    setError({message:result.message,color:"orange"})
-                    setTimeout(()=>setError({message:'',
-                        color:"brown"}),3000)
-                }
-            },
-            (error) => {
-                console.log(error)
-            })
-    }
-    const regSepidar =()=>{
-        const postOptions={
-            method:'post',
-            headers: {'Content-Type': 'application/json',
-            "x-access-token":token&&token.token,"userId":token&&token.userId},
-            body:JSON.stringify({cartNo:data.orderNo})
-          }
-      fetch(env.siteApi + "/panel/faktor/edit-updateFaktor",postOptions)
-      .then(res => res.json())
-      .then(
-        (result) => {
-            if(result.error){}
-            else{
-                setContent(result)
-            }
-        },
-        (error) => {
-          console.log(error);
-        }
-      )
-    }
+    
     if(!content){
         return
     } else
@@ -150,11 +49,10 @@ function OrderPopUp(props){
                         props.customer[0].username:"-"} 
                     <sub>({(props.creator&&props.creator[0])?
                         props.creator[0].username:"-"})</sub>
-                    <span> شماره سفارش: {data.orderNo}</span>
+                    <span> شماره سفارش: {data._id}</span>
                     <div className="address-status">
-                         آدرس:  
-                    {(props.customer&&props.customer[0])?
-                        props.customer[0].Address:"-"} </div>
+                         موبایل:  
+                    {data.mobile} </div>
                     </div>
                 <i className="fa fa-remove closeModal" 
                     onClick={props.close}></i>
@@ -164,10 +62,10 @@ function OrderPopUp(props){
                         user={content.cart&&content.cart.userId}
                         payValue={payValue} setPayValue={setPayValue}
                         cartNo={data?data.orderNo:''} access={props.access}
-                        addToCart={(e)=>addToCart(e)}
-                        deleteFromCart={(e)=>removeItem(e)}
-                        regCart={(e)=>regSepidar(e)}
-                        cart={content.cart&&content.cart[0]} 
+                        addToCart={(e)=>{}}
+                        deleteFromCart={(e)=>{}}
+                        regCart={(e)=>{}}
+                        cart={content} 
                         setCart={(e)=>setContent(e)}
                         canEdit={content&&content.canEdit}
                         cartDetail={content.orderData?content.orderData:content.cartDetail} 

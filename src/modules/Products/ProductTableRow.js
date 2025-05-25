@@ -44,7 +44,7 @@ function ProductTableRow(props){
                   <img src={product.thumbUrl?(env.siteApiUrl+product.thumbUrl):env.defaultProduct} 
                   alt={product?product.title:"default"}/>
                   <div className="cu-name" onClick={()=>
-                  window.location.href="/products/detail/"+product._id}>
+                  {window.location.href=product.masterSku?"#":"/products/detail/"+product._id}}>
                     <p className="name">{product.title}</p>
                     <p className="email">{product.sku}</p>
                   </div>
@@ -65,25 +65,12 @@ function ProductTableRow(props){
                   <small> {product.openOrderCount?"(متنظر تایید: "+
                            product.openOrderCount+")":''}</small></>}
                   */}
-                  <span>{product.count?product.count:"ناموجود"}</span>
+                  <span></span>
                   </div>
               </td>
               <td>
                 <div className="order-price">
                   <p>{normalPriceCount(product.price&&product.price)}</p>
-                </div>
-              </td>
-              <td>
-                <div className="order-num existSmall">
-                  {Count?<p>{Count.storeCount-Count.orderCount}
-                    {Count.count3?<small className="store3Small">انبار3: {Count.count3}</small>:<></>}
-                  </p>:
-                  <button className="cal-count" onClick={()=>CalCount(product.sku)}>محاسبه</button>}
-                </div>
-              </td>
-              <td>
-                <div className="order-price">
-                  <p>{normalPriceCount(product.taxPrice&&product.taxPrice)}</p>
                 </div>
               </td>
               <td>
@@ -94,8 +81,8 @@ function ProductTableRow(props){
               <div className="more-btn">
               <i className={`tableIcon fas ${activeAcc?"fa-chevron-up":"fa-chevron-down"}`} 
                 onClick={()=>props.showDetail(activeAcc?"-1":props.index)} ></i>
-                <i className="tableIcon fas fa-edit" onClick={()=>
-                  window.location.href="/products/detail/"+product._id}></i>
+                {product.masterSku?<></>:<i className="tableIcon fas fa-edit" onClick={()=>
+                  window.location.href="/products/detail/"+product._id}></i>}
                 <i className="tableIcon fas fa-ellipsis-v" 
                   onClick={()=>setOpenOption(openOption?0:1)}></i>
               </div>

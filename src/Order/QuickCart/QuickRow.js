@@ -97,7 +97,7 @@ function QuickRow(props){
             </td>
 
             <td data-cell="کد کالا">
-            <p>{data.sku}</p>
+            <p>{data.company}</p>
             </td>
             <td data-cell="شرح کالا">
             <div className="product-title">
